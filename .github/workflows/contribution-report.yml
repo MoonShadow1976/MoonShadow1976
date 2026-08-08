@@ -11,6 +11,12 @@ on:
       - main
       - master
 
+# 与 GitHub-Profile-3D-Contrib 共享同一个并发组，避免两个 workflow 同时
+# checkout / commit / push 造成 ref 竞争（cannot lock ref）
+concurrency:
+  group: profile-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +41,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add reports/
-          git diff --cached --quiet || (
-            git commit -m "📊 Update contribution report [skip ci]"
-            git push
-          )
+          git diff --cached --quiet && { echo "No changes to commit"; exit 0; }
+          git commit -m "📊 Update contribution report [skip ci]"
+          # push 失败时先同步远程最新提交再重试，避免 non-fast-forward 拒绝
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt/5), pulling latest and retrying..."
+            git pull --rebase origin main || { echo "Rebase failed, aborting"; git rebase --abort; exit 1; }
+          done
+          echo "Push failed after 5 attempts"
+          exit 1

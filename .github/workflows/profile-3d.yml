@@ -11,6 +11,12 @@ on:
       - main
       - master
 
+# 与 Contribution Report 共享同一个并发组，避免两个 workflow 同时
+# checkout / commit / push 造成 ref 竞争（cannot lock ref）
+concurrency:
+  group: profile-main
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,6 +24,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
       # ---- 语言饼图（亮色主题）----
       # 使用 PAT（secrets.MY_PAT）可统计私有仓库；未配置时自动降级为 GITHUB_TOKEN（仅公开仓库）
@@ -46,13 +56,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
           USERNAME: ${{ github.repository_owner }}
 
+      # ---- 含 Fork 版本：语言饼图 + 3D 贡献图（自建脚本）----
+      # 自行读取所有仓库（含 Fork）的 languages 与 commits 数据，生成：
+      #   profile/top-langs-with-forks-{light,dark}.svg
+      #   profile-3d-contrib/profile-{gitblock,night-green}-with-forks.svg
+      - name: Generate fork-included cards
+        env:
+          GH_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
+        run: python scripts/generate_with_fork_cards.py
+
       # ---- 提交所有生成的卡片 ----
       - name: Commit & Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add profile/ profile-3d-contrib/
-          git diff --cached --quiet || (
-            git commit -m "🔄 Update profile cards [skip ci]"
-            git push
-          )
+          git diff --cached --quiet && { echo "No changes to commit"; exit 0; }
+          git commit -m "🔄 Update profile cards [skip ci]"
+          # push 失败时先同步远程最新提交再重试，避免 non-fast-forward 拒绝
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "Push succeeded"
+              exit 0
+            fi
+            echo "Push failed (attempt $attempt/5), pulling latest and retrying..."
+            git pull --rebase origin main || { echo "Rebase failed, aborting"; git rebase --abort; exit 1; }
+          done
+          echo "Push failed after 5 attempts"
+          exit 1

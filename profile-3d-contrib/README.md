@@ -14,4 +14,9 @@
 - `profile-night-rainbow.svg` - 暗夜彩虹版
 - `profile-gitblock.svg` - 等距方块风格版
 
+**含 Fork 版本**（由 `scripts/generate_with_fork_cards.py` 自建脚本生成，读取所有仓库含 Fork 的提交）：
+
+- `profile-gitblock-with-forks.svg` - 等距方块风格版（含 Fork）
+- `profile-night-green-with-forks.svg` - 暗夜绿版（含 Fork）
+
 > ⚠️ 请勿手动编辑此目录中的 SVG 文件，它们会被 GitHub Actions 自动覆盖。
