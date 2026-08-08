@@ -311,55 +311,76 @@ def render_sankey(lang_repo_bytes: dict, lang_totals: Counter, repo_totals: Coun
             f'fill="{color}" rx="2"/>'
         )
 
-    # ---- 底部图例：第一行语言（居中），第二行仓库（居中）----
-    # 字号已从 10px → 14px，相应留出更多高度 & 间距
+    # ---- 底部图例：语言行 + 仓库行，超宽自动换行，每行居中 ----
     legend_y_lang_title = height - 120
     legend_y_lang = height - 95
-    legend_y_repo_title = height - 68
-    legend_y_repo = height - 40
     legend_item_h = 14
     legend_gap_x = 14
 
-    def _draw_legend_row(items, y_row, svg_w, color_fn, label_fn=None):
-        n = len(items)
+    def _draw_legend_row(items, y_start, svg_w, color_fn):
+        """绘制图例行，超宽自动换行，每行独立居中。返回下一可用 y 坐标。"""
         item_widths = []
         for key, name in items:
-            # 14px 字体每个中文字约 9px，英文约 7px；采用平均 8px + 余量
             tw = len(name) * 8 + 18
             item_widths.append(tw)
-        total_w = sum(item_widths) + legend_gap_x * (n - 1)
-        sx = (svg_w - total_w) / 2
-        cx = sx
-        for i, (key, name) in enumerate(items):
-            color = color_fn(key, i)
-            lines.append(
-                f'<rect x="{cx:.1f}" y="{y_row - 11:.1f}" width="{legend_item_h}" height="{legend_item_h}" '
-                f'fill="{color}" rx="2"/>'
-                f'<text x="{cx + legend_item_h + 6:.1f}" y="{y_row + 1:.1f}" class="legend-label" '
-                f'text-anchor="start">{html.escape(name)}</text>'
-            )
-            cx += item_widths[i] + legend_gap_x
 
-    # 行标题（12px sub，位于图例方块上方居中）
+        row_h = legend_item_h + 8
+        max_w = svg_w - 40  # 左右各留 20px 边距
+
+        # 贪心分组：按顺序填入当前行，放不下则换行
+        row_groups = []
+        current = []
+        current_w = 0
+        for i, (key, name) in enumerate(items):
+            w = item_widths[i]
+            if current and current_w + legend_gap_x + w > max_w:
+                row_groups.append(current)
+                current = []
+                current_w = 0
+            if current:
+                current_w += legend_gap_x
+            current_w += w
+            current.append(i)
+        if current:
+            row_groups.append(current)
+
+        for ridx, indices in enumerate(row_groups):
+            y = y_start + ridx * row_h
+            rw = sum(item_widths[i] for i in indices) + legend_gap_x * (len(indices) - 1)
+            cx = (svg_w - rw) / 2
+            for i in indices:
+                key, name = items[i]
+                color = color_fn(key, i)
+                lines.append(
+                    f'<rect x="{cx:.1f}" y="{y - 11:.1f}" width="{legend_item_h}" height="{legend_item_h}" '
+                    f'fill="{color}" rx="2"/>'
+                    f'<text x="{cx + legend_item_h + 6:.1f}" y="{y + 1:.1f}" class="legend-label" '
+                    f'text-anchor="start">{html.escape(name)}</text>'
+                )
+                cx += item_widths[i] + legend_gap_x
+
+        return y_start + len(row_groups) * row_h
+
+    # 语言标题 + 图例
     lines.append(
         f'<text x="{width / 2}" y="{legend_y_lang_title}" text-anchor="middle" class="sub">语言</text>'
     )
-    # 第一行：语言
     lang_items = [(lang, lang) for lang in langs]
-    _draw_legend_row(lang_items, legend_y_lang, width,
-                     lambda name, i: color_for_lang(name, i))
+    next_y = _draw_legend_row(lang_items, legend_y_lang, width,
+                              lambda name, i: color_for_lang(name, i))
 
+    # 仓库标题 + 图例（位置随语言图例行数动态调整）
     def get_repo_display_name(rid):
         if repo_names and rid in repo_names:
             return repo_names[rid]
         return rid
 
+    repo_title_y = next_y + 12
     lines.append(
-        f'<text x="{width / 2}" y="{legend_y_repo_title}" text-anchor="middle" class="sub">仓库</text>'
+        f'<text x="{width / 2}" y="{repo_title_y}" text-anchor="middle" class="sub">仓库</text>'
     )
-    # 第二行：仓库（使用真实仓库名）
     repo_items = [(r, get_repo_display_name(r)) for r in repos]
-    _draw_legend_row(repo_items, legend_y_repo, width,
+    _draw_legend_row(repo_items, repo_title_y + 27, width,
                      lambda _name, i: DEFAULT_COLORS[i % len(DEFAULT_COLORS)])
 
     lines.append(svg_footer())

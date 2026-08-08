@@ -52,15 +52,15 @@
 <rect x="983.0" y="574.0" width="14" height="14" fill="#00ADD8" rx="2"/><text x="1003.0" y="586.0" class="legend-label" text-anchor="start">Go</text>
 <rect x="1031.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="1051.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
 <rect x="1111.0" y="574.0" width="14" height="14" fill="#F34B7D" rx="2"/><text x="1131.0" y="586.0" class="legend-label" text-anchor="start">C++</text>
-<text x="800.0" y="612" text-anchor="middle" class="sub">仓库</text>
-<rect x="55.0" y="629.0" width="14" height="14" fill="#2f80ed" rx="2"/><text x="75.0" y="641.0" class="legend-label" text-anchor="start">cli-toolbox</text>
-<rect x="175.0" y="629.0" width="14" height="14" fill="#eb5757" rx="2"/><text x="195.0" y="641.0" class="legend-label" text-anchor="start">legacy-fork-webpy</text>
-<rect x="343.0" y="629.0" width="14" height="14" fill="#f2994a" rx="2"/><text x="363.0" y="641.0" class="legend-label" text-anchor="start">infra-as-code</text>
-<rect x="479.0" y="629.0" width="14" height="14" fill="#56ccf2" rx="2"/><text x="499.0" y="641.0" class="legend-label" text-anchor="start">moon-ai-assistant</text>
-<rect x="647.0" y="629.0" width="14" height="14" fill="#bb6bd9" rx="2"/><text x="667.0" y="641.0" class="legend-label" text-anchor="start">ml-experiment-lab</text>
-<rect x="815.0" y="629.0" width="14" height="14" fill="#27ae60" rx="2"/><text x="835.0" y="641.0" class="legend-label" text-anchor="start">devops-playground</text>
-<rect x="983.0" y="629.0" width="14" height="14" fill="#e91e63" rx="2"/><text x="1003.0" y="641.0" class="legend-label" text-anchor="start">dotfiles-public</text>
-<rect x="1135.0" y="629.0" width="14" height="14" fill="#00bcd4" rx="2"/><text x="1155.0" y="641.0" class="legend-label" text-anchor="start">blog-engine-theme</text>
-<rect x="1303.0" y="629.0" width="14" height="14" fill="#ff5722" rx="2"/><text x="1323.0" y="641.0" class="legend-label" text-anchor="start">docs-site</text>
-<rect x="1407.0" y="629.0" width="14" height="14" fill="#795548" rx="2"/><text x="1427.0" y="641.0" class="legend-label" text-anchor="start">rust-wasm-utils</text>
+<text x="800.0" y="619" text-anchor="middle" class="sub">仓库</text>
+<rect x="55.0" y="635.0" width="14" height="14" fill="#2f80ed" rx="2"/><text x="75.0" y="647.0" class="legend-label" text-anchor="start">cli-toolbox</text>
+<rect x="175.0" y="635.0" width="14" height="14" fill="#eb5757" rx="2"/><text x="195.0" y="647.0" class="legend-label" text-anchor="start">legacy-fork-webpy</text>
+<rect x="343.0" y="635.0" width="14" height="14" fill="#f2994a" rx="2"/><text x="363.0" y="647.0" class="legend-label" text-anchor="start">infra-as-code</text>
+<rect x="479.0" y="635.0" width="14" height="14" fill="#56ccf2" rx="2"/><text x="499.0" y="647.0" class="legend-label" text-anchor="start">moon-ai-assistant</text>
+<rect x="647.0" y="635.0" width="14" height="14" fill="#bb6bd9" rx="2"/><text x="667.0" y="647.0" class="legend-label" text-anchor="start">ml-experiment-lab</text>
+<rect x="815.0" y="635.0" width="14" height="14" fill="#27ae60" rx="2"/><text x="835.0" y="647.0" class="legend-label" text-anchor="start">devops-playground</text>
+<rect x="983.0" y="635.0" width="14" height="14" fill="#e91e63" rx="2"/><text x="1003.0" y="647.0" class="legend-label" text-anchor="start">dotfiles-public</text>
+<rect x="1135.0" y="635.0" width="14" height="14" fill="#00bcd4" rx="2"/><text x="1155.0" y="647.0" class="legend-label" text-anchor="start">blog-engine-theme</text>
+<rect x="1303.0" y="635.0" width="14" height="14" fill="#ff5722" rx="2"/><text x="1323.0" y="647.0" class="legend-label" text-anchor="start">docs-site</text>
+<rect x="1407.0" y="635.0" width="14" height="14" fill="#795548" rx="2"/><text x="1427.0" y="647.0" class="legend-label" text-anchor="start">rust-wasm-utils</text>
 </svg>

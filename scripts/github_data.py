@@ -192,7 +192,7 @@ def get_all_data(demo: bool = False) -> dict:
     fork_count = sum(1 for r in repos if r.get("fork"))
     print(f"  仓库总数: {len(repos)}（其中 Fork {fork_count}）")
 
-    since = (date.today() - timedelta(days=365)).isoformat()
+    since = (date.today() - timedelta(days=371)).isoformat()  # 53 周，与 build_grid 的网格范围对齐
 
     lang_bytes = Counter()
     repo_languages = {}
