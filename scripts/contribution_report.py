@@ -20,6 +20,7 @@
 import json
 import os
 import subprocess
+import time
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -32,24 +33,50 @@ PER_PAGE = 100
 
 
 def gh(path: str) -> list:
-    """调用 gh api（自动分页）并返回 JSON 数组。"""
+    """调用 gh api（自动分页）并返回合并后的 JSON 数组。
+
+    gh api --paginate 会逐页输出 JSON（每页一个数组、每行一个），
+    这里逐行解析合并，兼容新版 gh（合并为单个数组）与逐页输出两种行为。
+    """
     cmd = [
         "gh", "api", "--paginate",
         path,
         "--jq", 'if type == "array" then . else [.] end',
     ]
-    proc = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    return json.loads(proc.stdout)
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or f"gh api failed (exit {proc.returncode})")
+    results: list = []
+    for line in proc.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        data = json.loads(line)
+        if isinstance(data, list):
+            results.extend(data)
+        else:
+            results.append(data)
+    return results
 
 
 def fetch_commits(repo: str) -> list:
-    """拉取指定仓库中归属当前用户的提交。"""
-    try:
-        data = gh(f"/repos/{USERNAME}/{repo}/commits?author={USERNAME}")
-    except subprocess.CalledProcessError as e:
-        err = (e.stderr or "").strip().splitlines()
-        print(f"  ⚠ 跳过 {repo}: {err[0] if err else e}")
-        return []
+    """拉取指定仓库中归属当前用户的提交（失败自动重试，空仓库直接跳过）。"""
+    data = []
+    for attempt in range(3):
+        try:
+            data = gh(f"/repos/{USERNAME}/{repo}/commits?author={USERNAME}")
+            break
+        except (subprocess.CalledProcessError, RuntimeError, json.JSONDecodeError) as e:
+            msg = str(e)
+            if "Git Repository is empty" in msg:
+                print(f"  ⚠ 跳过空仓库 {repo}")
+                return []
+            if attempt < 2:
+                print(f"  ↻ 重试 {repo} ({attempt + 1}/3): {msg[:80]}")
+                time.sleep(1 + attempt)
+                continue
+            print(f"  ⚠ 跳过 {repo}: {msg[:120]}")
+            return []
 
     commits = []
     for c in data:
