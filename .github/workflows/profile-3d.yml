@@ -1,0 +1,58 @@
+name: GitHub-Profile-3D-Contrib
+
+on:
+  schedule:
+    # 每天 UTC 18:00（北京时间凌晨2点）自动更新
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    # 支持手动触发
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # ---- 语言饼图（亮色主题）----
+      # 使用 PAT（secrets.MY_PAT）可统计私有仓库；未配置时自动降级为 GITHUB_TOKEN（仅公开仓库）
+      - name: Generate top-langs card (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&layout=pie&langs_count=10&theme=default&hide_border=true
+          path: profile/top-langs-light.svg
+          token: ${{ secrets.MY_PAT }}
+
+      # ---- 语言饼图（暗色主题）----
+      - name: Generate top-langs card (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=${{ github.repository_owner }}&layout=pie&langs_count=10&theme=github_dark&hide_border=true
+          path: profile/top-langs-dark.svg
+          token: ${{ secrets.MY_PAT }}
+
+      # ---- 3D 贡献图（含私有仓库贡献）----
+      # 使用 PAT 后，私有仓库的 commit 也会进入贡献统计
+      - name: Generate 3D Contribution Graph
+        uses: yoshi389111/github-profile-3d-contrib@v0.9.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
+          USERNAME: ${{ github.repository_owner }}
+
+      # ---- 提交所有生成的卡片 ----
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add profile/ profile-3d-contrib/
+          git diff --cached --quiet || (
+            git commit -m "🔄 Update profile cards [skip ci]"
+            git push
+          )

@@ -1,0 +1,41 @@
+name: Contribution Report
+
+on:
+  schedule:
+    # 每天 UTC 1:30（北京时间早上9:30）自动更新
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+    # 支持手动触发
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 生成贡献报告（遍历所有公开仓库含 Fork，?author= 归因所有关联邮箱）
+      # 使用 PAT（secrets.MY_PAT）可统计私有仓库；未配置时自动降级为 GITHUB_TOKEN
+      - name: Generate Contribution Report
+        env:
+          GH_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
+        run: python scripts/contribution_report.py
+
+      - name: Commit & Push Report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet || (
+            git commit -m "📊 Update contribution report [skip ci]"
+            git push
+          )
