@@ -189,11 +189,11 @@ def render_lang_card(items: list, theme: dict) -> str:
     rx = theme.get("card_border_radius", "4.5")
 
     # 布局参数（与 github-readme-stats-action 的 pie layout 对齐）
-    body_offset_y = 65          # 饼图+图例整体下移（为 subtitle 留空间）
-    pie_cx, pie_cy, pie_r = 150, 95, 90
-    legend_body_y = 210         # 图例在 body 中的起始 y
+    body_offset_y = 70          # 饼图+图例整体下移（为 subtitle 留空间）
+    pie_cx, pie_cy, pie_r = 150, 105, 85
+    legend_body_y = 205         # 图例在 body 中的起始 y
     col_x_left, col_x_right = 25, 150   # 两列图例起点 x
-    row_h = 20                  # 单行高度（10 项压缩到 5 行 × 20px，刚好 375）
+    row_h = 18                  # 单行高度（10 项压缩到 5 行 × 18px）
     legend_circle_r = 5
     text_dx = 15                # 文字相对圆心右偏移
 
@@ -336,9 +336,8 @@ def build_lang_items(lang_bytes: Counter) -> list:
 #   - 合成：贡献网格 + 雷达图 + 迷你环形图（语言） + 底部统计行 + 日期
 # ---------------------------------------------------------------------------
 
-# 每个活跃度 level 对应的方块侧面高度（应用 scale 前的像素高度）
-# 参考 yoshi389111 输出：level 0 最短，level 4 最高（约为 0 的 6 倍）
-LEVEL_SIDE_HEIGHT = [8, 16, 26, 36, 46]
+# 每个活跃度 level 对应的方块侧面高度（参考 yoshi389111 实际输出值）
+LEVEL_SIDE_HEIGHT = [4.62, 9.32, 13.8, 18.08, 33.51]
 
 # 单个方块 base rect + 3 个面的变换（与 yoshi389111 完全一致）
 BLOCK_W = 32                   # 顶面 base 宽（未变换）
@@ -347,9 +346,12 @@ LEFT_TX = "skewY(30) scale(0.56 0.65)"
 RIGHT_TX_OFFSET_X, RIGHT_TX_OFFSET_Y = 18, 10.39
 RIGHT_TX = f"translate({RIGHT_TX_OFFSET_X} {RIGHT_TX_OFFSET_Y}) skewY(-30) scale(0.56 0.65)"
 
-# 等距网格步进：同一 row 前进一个 col → x+20 y+11.547；同一 col 前进一个 row → x-10 y+17.32
-GRID_COL_DX, GRID_COL_DY = 20.0, 20.0 * math.tan(math.radians(30))  # 11.547
-GRID_ROW_DX, GRID_ROW_DY = -10.0, 20.0 * math.cos(math.radians(30))  # -10, 17.32
+# 等距网格步进（从参考 SVG 实测）：
+#   列主方向：下一 col → x+20, y+11.547
+#   行主方向：下一 row → x-20, y+11.547
+# 两个方向 y 偏移相同（都是 20*tan(30°)），x 偏移等幅反向
+GRID_COL_DX, GRID_COL_DY = 20.0, 20.0 * math.tan(math.radians(30))  # 20, 11.547
+GRID_ROW_DX, GRID_ROW_DY = -20.0, 20.0 * math.tan(math.radians(30))  # -20, 11.547
 
 # 雷达图维度
 RADAR_DIMS = ["Commit", "Issue", "PullReq", "Review", "Repo"]
@@ -425,17 +427,12 @@ def render_gitblock(cells: list, months: list, theme: dict,
 
     cols, rows = len(cells), len(cells[0])  # 53, 7
 
-    # ===== 1. 计算网格在画布上的放置（放在中部偏右，左侧留给迷你 donut）=====
-    # 相对 bbox：列主方向 x+20 y+11.547，行主方向 x-10 y+17.32
-    # x 极值：(cols-1)*COL_DX + 0*ROW_DX ≈ 1040 最大；0 + (rows-1)*ROW_DX ≈ -60 最小
-    # y 极值：(cols-1)*COL_DY + (rows-1)*ROW_DY ≈ 600+104 ≈ 704 最大
-    # 目标：网格右缘 ≤ 1200，下缘 ≤ 820，左缘 ≥ 100
-    grid_w = (cols - 1) * GRID_COL_DX + (rows - 1) * abs(GRID_ROW_DX)  # ~1100
-    grid_h_max = (cols - 1) * GRID_COL_DY + (rows - 1) * GRID_ROW_DY  # ~704
-    # 让网格右边界在 x=1180，这样左边界大约 = 1180 - 1040 = 140
-    grid_origin_x = 1180 - ((cols - 1) * GRID_COL_DX)  # = 140
-    # 让网格底部在 y=820，反推 origin_y
-    grid_origin_y = 820 - grid_h_max  # ≈ 115
+    # ===== 1. 计算网格在画布上的放置（与参考 SVG 对齐）=====
+    # x 范围：row 方向 -120 到 col 方向 +1040 → 跨度 1160
+    # y 范围：0 到 (cols-1+rows-1)*11.547 ≈ 669.7
+    # 目标：左缘 ~20，右缘 ~1180，底缘 ~820
+    grid_origin_x = 140
+    grid_origin_y = 150
 
     levels = theme["levels"]  # [(top_hsl, left_rgb, right_rgb), ...]
     radar_stroke = theme["radar_stroke"]
@@ -464,8 +461,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
         return gx, gy
 
     # 月份标签（网格上方水平排列，不随等距下斜）
-    # 参考 yoshi389111：月份全部在同一水平线上（顶部 y 固定），x 按该列 block 中心对齐
-    label_y = grid_origin_y - 35  # 网格上方 35px 水平线
+    label_y = grid_origin_y - 25  # 网格上方 25px 水平线
     for col, label in months:
         mx, _ = cell_translate(col, 0)
         mx += 10  # 半个 col step，对准该列中心
