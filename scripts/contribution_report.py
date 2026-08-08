@@ -36,7 +36,8 @@ from pathlib import Path
 
 USERNAME = os.environ.get("REPORT_USERNAME", "MoonShadow1976")
 REPO_DIR = Path(__file__).resolve().parent.parent / "reports"
-REPORT_FILE = REPO_DIR / "contribution-report.md"
+PROFILE_DIR = Path(__file__).resolve().parent.parent / "profile"
+SANKEY_SVG = PROFILE_DIR / "lang-repo-sankey.svg"
 MAX_COMMITS_PER_REPO = 2000
 PER_PAGE = 100
 
@@ -158,6 +159,7 @@ def svg_header(w: int, h: int, bg: str = "#ffffff") -> list:
         f'<style>.title{{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}}'
         f'.sub{{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}}'
         f'.label{{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}}'
+        f'.legend-label{{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}}'
         f'.tick{{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}}'
         f'.axis{{stroke:#e4e2e2;stroke-width:1px;}}'
         f'.grid{{stroke:#f0f0f0;stroke-width:1px;}}'
@@ -171,80 +173,68 @@ def svg_footer() -> str:
 
 
 def render_sankey(lang_repo_bytes: dict, lang_totals: Counter, repo_totals: Counter,
-                  width: int = 900, height: int = 420) -> str:
-    """桑基图：左列语言 → 右列项目，连线宽度表示字节量。
+                  repo_names: dict | None = None,
+                  width: int = 1600, height: int = 680) -> str:
+    """桑基图：左列语言 → 右列仓库，连线用"带状 path"精确匹配节点内堆叠高度。
 
-    lang_repo_bytes: {(lang, repo_id): bytes}
-    lang_totals: Counter({lang: total_bytes})
-    repo_totals: Counter({repo_id: total_bytes})
+    - 连线 = 两个贝塞尔曲线（上边缘 + 下边缘）闭合填充，宽度严格等于节点内该段高度
+    - 不重叠：每条 link 独立堆叠，互不遮挡
+    - 底部图例：第一行语言（居中排列），第二行仓库（居中排列）
     """
     lines = svg_header(width, height)
-    lines.append('<text x="450" y="24" text-anchor="middle" class="title">语言 → 项目 流向分析</text>')
+    lines.append(f'<text x="{width/2}" y="28" text-anchor="middle" class="title">语言 → 项目 流向分析</text>')
 
-    pad_top = 50
-    pad_bottom = 30
-    pad_left = 20
-    pad_right = 20
-    node_w = 18
+    pad_top = 60
+    pad_bottom = 150       # 底部留给图例（2 大行 + 间距）
+    pad_left = 40
+    pad_right = 40
+    node_w = 20
 
-    langs = [l for l, _ in lang_totals.most_common(8)]
-    repos = [r for r, _ in repo_totals.most_common(8)]
+    langs = [l for l, _ in lang_totals.most_common(10)]
+    repos = [r for r, _ in repo_totals.most_common(10)]
     if not langs or not repos:
-        lines.append('<text x="450" y="200" text-anchor="middle" class="sub">暂无足够数据生成桑基图</text>')
+        lines.append(f'<text x="{width/2}" y="{height/2}" text-anchor="middle" class="sub">暂无足够数据生成桑基图</text>')
         lines.append(svg_footer())
         return "\n".join(lines)
 
     n_langs = len(langs)
     n_repos = len(repos)
     avail_h = height - pad_top - pad_bottom
-    avail_w = width - pad_left - pad_right - 2 * node_w
 
-    total_lang_bytes = sum(lang_totals[l] for l in langs) or 1
-    total_repo_bytes = sum(repo_totals[r] for r in repos) or 1
-
-    lang_gap = 4
-    repo_gap = 4
+    lang_gap = 6
+    repo_gap = 6
+    min_node_h = 14
 
     node_x_left = pad_left
     node_x_right = width - pad_right - node_w
 
-    # 按字节量比例分配节点高度，最小 18px 保证可见
-    min_node_h = 18
-    avail_h = height - pad_top - pad_bottom
-    n_langs = len(langs)
-    n_repos = len(repos)
-
-    # 语言节点
-    lang_total_bytes = sum(lang_totals[l] for l in langs) or 1
-    lang_raw_heights = [max(min_node_h, (lang_totals[l] / lang_total_bytes) * avail_h) for l in langs]
-    # 归一化到可用高度
-    lang_sum = sum(lang_raw_heights) + lang_gap * (n_langs - 1)
+    # ---- 计算节点高度（按比例，最小 14px）----
+    lang_total = sum(lang_totals[l] for l in langs) or 1
+    lang_raw = [max(min_node_h, (lang_totals[l] / lang_total) * avail_h) for l in langs]
+    lang_sum = sum(lang_raw) + lang_gap * (n_langs - 1)
     lang_scale = avail_h / lang_sum if lang_sum > avail_h else 1.0
-    lang_heights = [h * lang_scale for h in lang_raw_heights]
+    lang_heights = [h * lang_scale for h in lang_raw]
 
-    # 仓库节点
-    repo_total_bytes = sum(repo_totals[r] for r in repos) or 1
-    repo_raw_heights = [max(min_node_h, (repo_totals[r] / repo_total_bytes) * avail_h) for r in repos]
-    repo_sum = sum(repo_raw_heights) + repo_gap * (n_repos - 1)
+    repo_total = sum(repo_totals[r] for r in repos) or 1
+    repo_raw = [max(min_node_h, (repo_totals[r] / repo_total) * avail_h) for r in repos]
+    repo_sum = sum(repo_raw) + repo_gap * (n_repos - 1)
     repo_scale = avail_h / repo_sum if repo_sum > avail_h else 1.0
-    repo_heights = [h * repo_scale for h in repo_raw_heights]
+    repo_heights = [h * repo_scale for h in repo_raw]
 
-    # 计算每个节点的 Y 位置
+    # ---- 节点 Y 位置 ----
     lang_nodes = {}
     y = pad_top
     for i, lang in enumerate(langs):
-        h = lang_heights[i]
-        lang_nodes[lang] = (y, h)
-        y += h + lang_gap
+        lang_nodes[lang] = (y, lang_heights[i])
+        y += lang_heights[i] + lang_gap
 
     repo_nodes = {}
     y = pad_top
     for i, repo in enumerate(repos):
-        h = repo_heights[i]
-        repo_nodes[repo] = (y, h)
-        y += h + repo_gap
+        repo_nodes[repo] = (y, repo_heights[i])
+        y += repo_heights[i] + repo_gap
 
-    # 画连线（从左到右，按字节量排序）
+    # ---- 汇总连线 ----
     links = []
     for lang in langs:
         for repo in repos:
@@ -252,51 +242,117 @@ def render_sankey(lang_repo_bytes: dict, lang_totals: Counter, repo_totals: Coun
             if amt > 0:
                 links.append((lang, repo, amt))
 
-    max_link = max((a for _, _, a in links), default=1) or 1
+    lang_link_total = Counter()
+    repo_link_total = Counter()
+    for lang, repo, amt in links:
+        lang_link_total[lang] += amt
+        repo_link_total[repo] += amt
 
-    for lang, repo, amt in sorted(links, key=lambda x: -x[2]):
-        ly, lh = lang_nodes[lang]
-        ry, rh = repo_nodes[repo]
+    # ---- 为每条 link 计算堆叠段 ----
+    lang_cursor = {l: lang_nodes[l][0] for l in langs}
+    repo_cursor = {r: repo_nodes[r][0] for r in repos}
 
-        # 连线宽度按比例
-        lw_max = min(lh, rh) * 0.8
-        lw = max(1.5, (amt / max_link) * lw_max)
+    link_edges = []
+    for lang in langs:
+        sub = [(r, a) for (l, r, a) in links if l == lang]
+        sub.sort(key=lambda x: -x[1])
+        for repo, amt in sub:
+            ny, nh = lang_nodes[lang]
+            ry, rh = repo_nodes[repo]
+            ltot = lang_link_total[lang] or 1
+            rtot = repo_link_total[repo] or 1
+            seg_h_lang = (amt / ltot) * nh
+            seg_h_repo = (amt / rtot) * rh
+            y0l = lang_cursor[lang]
+            y1l = y0l + seg_h_lang
+            y0r = repo_cursor[repo]
+            y1r = y0r + seg_h_repo
+            lang_cursor[lang] = y1l
+            repo_cursor[repo] = y1r
+            link_edges.append((lang, repo, amt, y0l, y1l, y0r, y1r))
 
-        # 左边连接点（语言节点右侧）
-        x0 = node_x_left + node_w
-        y0 = ly + lh / 2
-        # 右边连接点（项目节点左侧）
-        x1 = node_x_right
-        y1 = ry + rh / 2
+    # ---- 画连线（带状 path：两条贝塞尔闭合填充，宽度等于节点内该段高度）----
+    x0 = node_x_left + node_w
+    x1 = node_x_right
+    mx = (x0 + x1) / 2
 
-        # 三次贝塞尔曲线
-        mx = (x0 + x1) / 2
+    # 按 amt 从小到大绘制，小的在下层，大的在上层
+    for lang, repo, amt, y0l, y1l, y0r, y1r in sorted(link_edges, key=lambda x: x[2]):
         color = color_for_lang(lang, langs.index(lang))
+        # 带状闭合 path：
+        #   上边缘 (x0,y0l) → cubic → (x1,y0r)
+        #   右边缘 (x1,y0r) → line → (x1,y1r)
+        #   下边缘 (x1,y1r) → cubic → (x0,y1l)
+        #   左边缘 (x0,y1l) → line → (x0,y0l)
+        d = (
+            f"M{x0:.1f},{y0l:.1f} "
+            f"C{mx:.1f},{y0l:.1f} {mx:.1f},{y0r:.1f} {x1:.1f},{y0r:.1f} "
+            f"L{x1:.1f},{y1r:.1f} "
+            f"C{mx:.1f},{y1r:.1f} {mx:.1f},{y1l:.1f} {x0:.1f},{y1l:.1f} Z"
+        )
         lines.append(
-            f'<path d="M{x0:.1f},{y0:.1f} C{mx:.1f},{y0:.1f} {mx:.1f},{y1:.1f} {x1:.1f},{y1:.1f}" '
-            f'stroke="{color}" stroke-width="{lw:.1f}" fill="none" opacity="0.65"/>'
+            f'<path d="{d}" fill="{color}" fill-opacity="0.60" stroke="{color}" stroke-width="0.3"/>'
         )
 
-    # 画节点（语言：左侧，项目：右侧）
+    # ---- 画节点 ----
     for lang in langs:
         y, h = lang_nodes[lang]
         color = color_for_lang(lang, langs.index(lang))
         lines.append(
             f'<rect x="{node_x_left}" y="{y:.1f}" width="{node_w}" height="{h:.1f}" '
             f'fill="{color}" rx="2"/>'
-            f'<text x="{node_x_left - 6}" y="{y + h/2:.1f}" text-anchor="end" '
-            f'dominant-baseline="middle" class="label">{html.escape(lang)}</text>'
         )
 
-    for i, repo in enumerate(repos):
+    repo_id_to_idx = {r: i for i, r in enumerate(repos)}
+    for repo in repos:
         y, h = repo_nodes[repo]
-        color = DEFAULT_COLORS[i % len(DEFAULT_COLORS)]
+        idx = repo_id_to_idx[repo]
+        color = DEFAULT_COLORS[idx % len(DEFAULT_COLORS)]
         lines.append(
             f'<rect x="{node_x_right}" y="{y:.1f}" width="{node_w}" height="{h:.1f}" '
             f'fill="{color}" rx="2"/>'
-            f'<text x="{node_x_right + node_w + 6}" y="{y + h/2:.1f}" text-anchor="start" '
-            f'dominant-baseline="middle" class="label">项目 {i + 1}</text>'
         )
+
+    # ---- 底部图例：第一行语言（居中），第二行仓库（居中）----
+    legend_y_lang = height - 100
+    legend_y_repo = height - 55
+    legend_item_h = 16
+    legend_gap_x = 10
+
+    def _draw_legend_row(items, y_row, svg_w, color_fn, label_fn=None):
+        """居中排列的一行图例。items: [(key, display_name)]"""
+        n = len(items)
+        item_widths = []
+        for key, name in items:
+            tw = len(name) * 6.5 + 14
+            item_widths.append(tw)
+        total_w = sum(item_widths) + legend_gap_x * (n - 1)
+        sx = (svg_w - total_w) / 2
+        cx = sx
+        for i, (key, name) in enumerate(items):
+            color = color_fn(key, i)
+            lines.append(
+                f'<rect x="{cx:.1f}" y="{y_row - 9:.1f}" width="9" height="9" '
+                f'fill="{color}" rx="2"/>'
+                f'<text x="{cx + 13:.1f}" y="{y_row - 1:.1f}" class="legend-label" '
+                f'text-anchor="start">{html.escape(name)}</text>'
+            )
+            cx += item_widths[i] + legend_gap_x
+
+    # 第一行：语言
+    lang_items = [(lang, lang) for lang in langs]
+    _draw_legend_row(lang_items, legend_y_lang, width,
+                     lambda name, i: color_for_lang(name, i))
+
+    # 第二行：仓库（使用真实仓库名）
+    def get_repo_display_name(rid):
+        if repo_names and rid in repo_names:
+            return repo_names[rid]
+        return rid
+
+    repo_items = [(r, get_repo_display_name(r)) for r in repos]
+    _draw_legend_row(repo_items, legend_y_repo, width,
+                     lambda _name, i: DEFAULT_COLORS[i % len(DEFAULT_COLORS)])
 
     lines.append(svg_footer())
     return "\n".join(lines)
@@ -475,213 +531,85 @@ def render_report(repo_count: int, fork_count: int, lang_bytes: Counter,
                   repo_commits: dict, lang_repo_bytes: dict,
                   issue_count: int = 0, pr_count: int = 0) -> str:
     lines = []
-    lines.append("# 📊 贡献报告\n")
-    lines.append("> 由 GitHub Actions 每日自动生成 · 所有数据匿名化处理\n")
-    lines.append(f"- **统计范围**: 所有公开仓库（**含 Fork**）")
-    lines.append(f"- **生成时间**: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}\n")
+    lines.append("# 🔀 语言 → 项目 流向\n")
 
-    # ---- 总览卡片 ----
-    total_commits = sum(len(v) for v in repo_commits.values())
-    lines.append('<table align="center" width="100%"><tr>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{total_commits}</b><br><sub>提交总数</sub></td>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{repo_count}</b><br><sub>项目数</sub></td>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{fork_count}</b><br><sub>Fork 数</sub></td>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{len(lang_bytes)}</b><br><sub>语言种类</sub></td>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{pr_count}</b><br><sub>Pull Request</sub></td>')
-    lines.append(f'<td align="center"><b style="font-size:28px;">{issue_count}</b><br><sub>Issue</sub></td>')
-    lines.append('</tr></table>\n')
+    # ---- 取前10个项目（按提交量排序）----
+    repo_sorted = sorted(repo_commits.items(), key=lambda x: -len(x[1]))
+    top_repo_ids = [rid for rid, _ in repo_sorted[:10]]
 
     # ---- 桑基图 ----
-    lines.append("## 🔀 语言 → 项目 流向\n")
     lines.append('<div align="center">')
     repo_totals = Counter()
     for (_lang, repo_id), amt in lang_repo_bytes.items():
-        repo_totals[repo_id] += amt
-    sankey_svg = render_sankey(lang_repo_bytes, lang_bytes, repo_totals)
+        if repo_id in top_repo_ids:
+            repo_totals[repo_id] += amt
+
+    # 筛选只关联前10项目的 (lang, repo) 对
+    top_lang_repo_bytes = {
+        k: v for k, v in lang_repo_bytes.items() if k[1] in top_repo_ids
+    }
+    # 对应的语言只取有数据的（并按字节量排序）
+    top_lang_totals = Counter()
+    for (lang, _rid), amt in top_lang_repo_bytes.items():
+        top_lang_totals[lang] += amt
+
+    sankey_svg = render_sankey(top_lang_repo_bytes, top_lang_totals, repo_totals)
     lines.append(sankey_svg)
     lines.append('</div>\n')
 
-    # ---- 语言饼图 ----
-    lines.append("## 💻 语言使用分布\n")
-    lang_items = []
-    total = sum(lang_bytes.values()) or 1
-    top_langs = lang_bytes.most_common(8)
-    rest = total - sum(v for _, v in top_langs)
-    for name, size in top_langs:
-        lang_items.append((name, color_for_lang(name), size / total * 100))
-    if rest > 0:
-        lang_items.append(("其他", "#8b949e", rest / total * 100))
-
-    lines.append('<div align="center">')
-    lines.append(render_pie(lang_items, "语言使用分布", f"共 {len(lang_bytes)} 种语言 · {total:,} 字节"))
-    lines.append('</div>\n')
-
-    # ---- 月度提交趋势 ----
-    lines.append("## 📈 月度提交趋势\n")
-    monthly = Counter()
-    for _repo, dates in repo_commits.items():
-        for d in dates:
-            monthly[d[:7]] += 1
-    recent_months = sorted(monthly.items())[-12:] if monthly else []
-    if recent_months:
-        lines.append('<div align="center">')
-        lines.append(render_bar(recent_months, "最近 12 个月提交量", color="#2f80ed"))
-        lines.append('</div>\n')
-    else:
-        lines.append("暂无提交数据。\n")
-
-    # ---- 项目贡献排行 ----
-    lines.append("## 📁 项目贡献排行\n")
-    repo_items = sorted(repo_commits.items(), key=lambda x: -len(x[1]))
-    if repo_items:
-        display = [(f"项目 {i+1}", len(dates)) for i, (_, dates) in enumerate(repo_items[:10])]
-        lines.append('<div align="center">')
-        lines.append(render_bar(display, "TOP 10 项目提交量", color="#eb5757"))
-        lines.append('</div>\n')
-
-    # ---- 星期分布 ----
-    lines.append("## 🗓 星期分布\n")
-    weekday_counts = Counter()
-    for _repo, dates in repo_commits.items():
-        for d in dates:
-            try:
-                wd = date.fromisoformat(d).weekday()
-                weekday_counts[wd] += 1
-            except ValueError:
-                pass
-    if weekday_counts:
-        day_names = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-        wd_data = [(day_names[i], weekday_counts.get(i, 0)) for i in range(7)]
-        lines.append('<div align="center">')
-        lines.append(render_bar(wd_data, "按星期分布", color="#f2994a"))
-        lines.append('</div>\n')
-
-    # ---- 小时分布 ----
-    lines.append("## 🕐 小时分布\n")
-    hour_counts = Counter()
-    for _repo, dates in repo_commits.items():
-        for d in dates:
-            try:
-                h = int(d[11:13]) if len(d) >= 13 else 12
-                hour_counts[h] += 1
-            except (ValueError, IndexError):
-                pass
-    if hour_counts:
-        hour_data = [(f"{h:02d}:00", hour_counts.get(h, 0)) for h in range(24)]
-        lines.append('<div align="center">')
-        lines.append(render_bar(hour_data, "按小时分布（UTC）", width=900, color="#56ccf2"))
-        lines.append('</div>\n')
-
-    lines.append("---")
-    lines.append("*由 GitHub Actions 每日自动更新 · 使用 `gh api` 拉取原始数据 · 数据已匿名化*\n")
     return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
-def generate_demo() -> dict:
-    import random
-    rnd = random.Random(42)
-    today = date.today()
-    since = (today - timedelta(days=365)).isoformat()
-
-    demo_langs = {
-        "Python": 52340, "TypeScript": 41200, "JavaScript": 35800,
-        "HTML": 22100, "CSS": 18750, "Shell": 12300, "Dockerfile": 8200,
-        "Go": 7400, "Rust": 5100, "C++": 3300, "Vue": 2100, "Markdown": 1500,
-    }
-
-    lang_bytes = Counter(demo_langs)
-    lang_repo_bytes = {}
-    repo_commits = {}
-    repo_ids = []
-
-    for i in range(10):
-        repo_id = f"repo_{i}"
-        repo_ids.append(repo_id)
-        # 每个项目主要使用 1-3 种语言
-        primary = list(demo_langs.keys())[rnd.randint(0, len(demo_langs) - 1)]
-        secondary = list(demo_langs.keys())[rnd.randint(0, len(demo_langs) - 1)]
-        if secondary == primary:
-            secondary = list(demo_langs.keys())[(list(demo_langs.keys()).index(primary) + 3) % len(demo_langs)]
-
-        for lang in [primary, secondary]:
-            amt = rnd.randint(500, 8000)
-            lang_repo_bytes[(lang, repo_id)] = amt
-
-        # 生成提交日期
-        dates = []
-        for _ in range(rnd.randint(5, 100)):
-            offset = rnd.randint(0, 364)
-            d = (today - timedelta(days=offset)).isoformat()
-            dates.append(d)
-        repo_commits[repo_id] = sorted(dates)
-
-    return {
-        "lang_bytes": lang_bytes,
-        "lang_repo_bytes": lang_repo_bytes,
-        "repo_commits": repo_commits,
-        "repo_count": len(repo_ids),
-        "fork_count": 3,
-        "issue_count": 36,
-        "pr_count": 16,
-    }
-
-
 def main() -> None:
     demo = "--demo" in sys.argv
     print(f"统计用户: {USERNAME}" + ("（演示模式）" if demo else ""))
 
-    if demo:
-        data = generate_demo()
-        lang_bytes = data["lang_bytes"]
-        lang_repo_bytes = data["lang_repo_bytes"]
-        repo_commits = data["repo_commits"]
-        repo_count = data["repo_count"]
-        fork_count = data["fork_count"]
-        issue_count = data["issue_count"]
-        pr_count = data["pr_count"]
-    else:
-        repos = fetch_repos()
-        fork_count = sum(1 for r in repos if r.get("fork"))
-        print(f"仓库总数: {len(repos)}（其中 Fork {fork_count}）")
+    # 使用共享数据层
+    try:
+        from github_data import get_all_data
+        data = get_all_data(demo=demo)
+    except ImportError:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from github_data import get_all_data
+        data = get_all_data(demo=demo)
 
-        since = (date.today() - timedelta(days=365)).isoformat()
-        lang_bytes = Counter()
-        lang_repo_bytes = {}   # {(lang, anon_id): bytes}
-        repo_commits = {}      # {anon_id: [date_str, ...]}
+    lang_bytes = data["lang_bytes"]
+    lang_repo_bytes = data["lang_repo_bytes"]
+    repo_commit_dates = data["repo_commit_dates"]
+    issue_count = data["issue_count"]
+    pr_count = data["pr_count"]
 
-        for idx, r in enumerate(repos):
-            name = r.get("name", "")
-            anon_id = f"repo_{idx}"
+    # repo_commit_dates: {repo_name: [date_str, ...]}  — key 就是真实仓库名
+    # lang_repo_bytes: {(lang, repo_name): bytes}
+    # 按提交量排序取前 10 个仓库
+    repo_sorted = sorted(repo_commit_dates.items(), key=lambda x: -len(x[1]))
+    top_repo_names = [name for name, _ in repo_sorted[:10]]
 
-            langs = fetch_languages(name)
-            for lang, size in langs.items():
-                lang_bytes[lang] += size
-                lang_repo_bytes[(lang, anon_id)] = size
-
-            dates = fetch_commit_dates(name, since)
-            if dates:
-                repo_commits[anon_id] = dates
-
-        repo_count = len(repos)
-        issue_count = fetch_search_count(f"is:issue author:{USERNAME}")
-        pr_count = fetch_search_count(f"is:pr author:{USERNAME}")
-        print(f"  Issue={issue_count}, PR={pr_count}")
-
-    # 构建 repo → total_bytes 映射供桑基图右列使用
     repo_totals = Counter()
-    for (lang, repo_id), amt in lang_repo_bytes.items():
-        repo_totals[repo_id] += amt
+    for (_lang, repo_name), amt in lang_repo_bytes.items():
+        if repo_name in top_repo_names:
+            repo_totals[repo_name] += amt
 
-    report = render_report(repo_count, fork_count, lang_bytes, repo_commits,
-                           lang_repo_bytes, issue_count, pr_count)
+    top_lang_repo_bytes = {
+        k: v for k, v in lang_repo_bytes.items() if k[1] in top_repo_names
+    }
+    top_lang_totals = Counter()
+    for (lang, _rn), amt in top_lang_repo_bytes.items():
+        top_lang_totals[lang] += amt
 
-    REPO_DIR.mkdir(parents=True, exist_ok=True)
-    REPORT_FILE.write_text(report, encoding="utf-8")
-    print(f"✅ 报告已生成: {REPORT_FILE}")
-    print(f"   提交总数: {sum(len(v) for v in repo_commits.values())}")
+    # 仓库名 → 显示名（直接用真实名）
+    repo_names_map = {name: name for name in top_repo_names}
+
+    sankey = render_sankey(top_lang_repo_bytes, top_lang_totals, repo_totals,
+                           repo_names=repo_names_map)
+
+    PROFILE_DIR.mkdir(parents=True, exist_ok=True)
+    SANKEY_SVG.write_text(sankey, encoding="utf-8")
+    print(f"✅ 桑基图已生成: {SANKEY_SVG}")
+    print(f"   项目数: {len(top_repo_names)}, 语言数: {len(top_lang_totals)}")
 
 
 if __name__ == "__main__":

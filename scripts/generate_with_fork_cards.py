@@ -336,8 +336,8 @@ def build_lang_items(lang_bytes: Counter) -> list:
 #   - 合成：贡献网格 + 雷达图 + 迷你环形图（语言） + 底部统计行 + 日期
 # ---------------------------------------------------------------------------
 
-# 每个活跃度 level 对应的方块侧面高度（参考 yoshi389111 实际输出值）
-LEVEL_SIDE_HEIGHT = [4.62, 9.32, 13.8, 18.08, 33.51]
+# 每个活跃度 level 对应的方块侧面高度（level 0 = 0，底面平铺不凸起）
+LEVEL_SIDE_HEIGHT = [0, 9.32, 13.8, 18.08, 33.51]
 
 # 单个方块 base rect + 3 个面的变换（与 yoshi389111 完全一致）
 BLOCK_W = 32                   # 顶面 base 宽（未变换）
@@ -405,10 +405,13 @@ def build_grid(commit_counts: Counter):
 
 
 def _radar_point(radius_ratio: float, idx: int) -> tuple:
-    """雷达图 5 个顶点（等距五边形），idx=0 在正上方。"""
+    """雷达图 5 个顶点（等距五边形），idx=0 在正上方。
+
+    SVG y 轴向下，所以 sin(angle) 在 -90° 时 = -1，刚好指向"上方"（y 值更小）。
+    因此这里不要再对 sin 取反，否则会上下颠倒。
+    """
     angle = math.radians(-90 + idx * 72)
-    # 五边形顶点：半径 * (cos, sin)（y 轴向下，所以 sin 用负号取反向即可，最后 canvas 内再翻）
-    return radius_ratio * math.cos(angle), -radius_ratio * math.sin(angle)
+    return radius_ratio * math.cos(angle), radius_ratio * math.sin(angle)
 
 
 def render_gitblock(cells: list, months: list, theme: dict,
@@ -453,63 +456,88 @@ def render_gitblock(cells: list, months: list, theme: dict,
         f'<rect width="{W}" height="{H}" fill="{bg}"/>',
     ]
 
-    # ===== 3. 贡献格子（3 面矩形 + skew 变换，level 越高侧面越高）=====
-    # 绘制顺序：按 (col, row) 从小到大即可
+    # ===== 3. 贡献格子（polygon 顶点绘制，消除变换缝隙）=====
     def cell_translate(col, row):
         gx = grid_origin_x + col * GRID_COL_DX + row * GRID_ROW_DX
         gy = grid_origin_y + col * GRID_COL_DY + row * GRID_ROW_DY
         return gx, gy
 
-    # 月份标签（网格上方水平排列，不随等距下斜）
-    label_y = grid_origin_y - 25  # 网格上方 25px 水平线
-    for col, label in months:
-        mx, _ = cell_translate(col, 0)
-        mx += 10  # 半个 col step，对准该列中心
-        lines.append(f'<text x="{mx:.1f}" y="{label_y:.1f}" text-anchor="middle" {font_attr} '
-                     f'font-size="11" fill="{weak}">{label}</text>')
+    # 预计算所有单元格的顶点坐标，再按 level 绘制（相同 level 可以批量绘制以减少标签数）
+    # 单元底面 4 顶点（菱形）：A(顶), B(右), C(左), D(底)
+    # col 方向向量 (20, 11.547)；row 方向向量 (-20, 11.547)
+    COS30 = math.cos(math.radians(30))  # 0.866025...
 
+    # 收集所有单元格到统一列表，按 (col+row, level) 排序后一次性绘制
+    # 排序规则：col+row 小的（远/后）先画，同深度下 level 小的（矮）先画
+    # 这样后方的矮块不会被前方的矮块错误遮挡，后方的高块也不会覆盖前方矮块
+    all_cells = []
     for col in range(cols):
         for row in range(rows):
             lvl = cells[col][row]
-            top_c, left_c, right_c = levels[lvl]
-            side_h = LEVEL_SIDE_HEIGHT[lvl]
-            tx, ty = cell_translate(col, row)
-            # 顶面
+            all_cells.append((col, row, lvl))
+
+    all_cells.sort(key=lambda c: (c[0] + c[1], c[2], c[1]))
+
+    for col, row, lvl in all_cells:
+        top_c, left_c, right_c = levels[lvl]
+        side_h = LEVEL_SIDE_HEIGHT[lvl]
+        gx, gy = cell_translate(col, row)
+
+        # 底面 4 顶点（菱形）：
+        # col 方向 (20, 11.547)  右下  —  B
+        # row 方向 (-20, 11.547) 左下  —  C
+        # 综合：A(后上) B(右下) C(左下) D(前下)
+        A = (gx, gy)
+        B = (gx + GRID_COL_DX, gy + GRID_COL_DY)
+        C = (gx + GRID_ROW_DX, gy + GRID_ROW_DY)
+        D = (gx + GRID_COL_DX + GRID_ROW_DX, gy + GRID_COL_DY + GRID_ROW_DY)
+
+        # 顶面 = 底面整体向上平移 side_h（screen y 减小）
+        side_h_visual = side_h
+        At = (A[0], A[1] - side_h_visual)
+        Bt = (B[0], B[1] - side_h_visual)
+        Ct = (C[0], C[1] - side_h_visual)
+        Dt = (D[0], D[1] - side_h_visual)
+
+        if lvl == 0:
+            # level 0 side_h=0，顶面=底面，平铺不凸起，边缘与相邻方块底边对齐
             lines.append(
-                f'<g transform="translate({tx:.2f} {ty:.2f})">'
-                f'<rect stroke="none" x="0" y="0" width="{BLOCK_W}" height="{BLOCK_W}" '
-                f'transform="{TOP_TX}" fill="{top_c}"></rect>'
-                f'<rect stroke="none" x="0" y="0" width="{BLOCK_W}" height="{side_h}" '
-                f'transform="{LEFT_TX}" fill="{left_c}"></rect>'
-                f'<rect stroke="none" x="0" y="0" width="{BLOCK_W}" height="{side_h}" '
-                f'transform="{RIGHT_TX}" fill="{right_c}"></rect>'
-                f'</g>')
+                f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
+                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
+                f'fill="{top_c}"/>')
+        else:
+            # 左侧面（左下前侧）：C → D → Dt → Ct
+            lines.append(
+                f'<polygon points="{C[0]:.2f},{C[1]:.2f} {D[0]:.2f},{D[1]:.2f} '
+                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
+                f'fill="{left_c}"/>')
+
+            # 右侧面（右下前侧）：B → D → Dt → Bt
+            lines.append(
+                f'<polygon points="{B[0]:.2f},{B[1]:.2f} {D[0]:.2f},{D[1]:.2f} '
+                f'{Dt[0]:.2f},{Dt[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f}" '
+                f'fill="{right_c}"/>')
+
+            # 顶面（菱形）最后画，盖住侧面顶端
+            lines.append(
+                f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
+                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
+                f'fill="{top_c}"/>')
 
     # ===== 4. 雷达图（右上：transform="translate(980, 284.5)"）=====
     radar_cx, radar_cy = 980, 284.5
     # 刻度半径：31.2 × 1..5（1, 10, 100, 1K, 10K）
     def r_of(ring):  return 31.2 * ring
     lines.append(f'<g transform="translate({radar_cx}, {radar_cy})">')
-    # 5 层五边形网格线
-    for ring in range(1, 6):
-        r = r_of(ring)
-        pts = []
-        for i in range(5):
-            px, py = _radar_point(r, i)
-            pts.append(f"{px:.2f},{py:.2f}")
-        lines.append(
-            f'<line x1="0" y1="{-r_of(1):.2f}" x2="{_radar_point(r_of(5), 1)[0]:.2f}" '
-            f'y2="{_radar_point(r_of(5), 1)[1]:.2f}" class="stroke-weak" '
-            f'style="stroke-dasharray: 4 4; stroke-width: 1px;"></line>'  # 临时，下面重画
-        )
-    # 重新画雷达的 5 层正五边形 + 5 条轴 + 刻度
-    lines[-1] = ""  # 清空上一行占位
+
+    # 5 层五边形网格线（独立绘制）
     for ring in range(1, 6):
         r = r_of(ring)
         pts = " ".join(f"{_radar_point(r, i)[0]:.2f},{_radar_point(r, i)[1]:.2f}" for i in range(5))
         lines.append(f'<polygon points="{pts}" fill="none" class="stroke-weak" '
                      f'style="stroke-dasharray: 4 4; stroke-width: 1px;"></polygon>')
-    # 对数刻度数值标签
+
+    # 对数刻度数值标签（在正上方轴上）
     tick_labels = ["1", "10", "100", "1K", "10K"]
     for ring, lbl in enumerate(tick_labels, start=1):
         y = -r_of(ring)
@@ -525,10 +553,10 @@ def render_gitblock(cells: list, months: list, theme: dict,
         stats.get("repo_count", 0),
     ]
     for i, (dim_name, raw) in enumerate(zip(RADAR_DIMS, raw_values)):
-        # 轴：从中心 (0,0) 到最外圈顶点
+        # 轴：从中心 (0,0) 到最外圈顶点（axis 起点是中心点 x1=0, y1=0）
         x5, y5 = _radar_point(r_of(5), i)
         lines.append(
-            f'<g class="axis"><line x1="0" y1="{_radar_point(r_of(1), i)[1]:.2f}" '
+            f'<g class="axis"><line x1="0" y1="0" '
             f'x2="{x5:.2f}" y2="{y5:.2f}" class="stroke-weak" '
             f'style="stroke-dasharray: 4 4; stroke-width: 1px;"></line>'
             f'<text style="font-size: 20.8px;" text-anchor="middle" dominant-baseline="middle" '
@@ -551,24 +579,22 @@ def render_gitblock(cells: list, months: list, theme: dict,
     donut_origin = (40, 520)
     mini_items = mini_donut_items[:3] if mini_donut_items else []
     if mini_items:
-        d_cx, d_cy = donut_origin[0] + 130 + 65, donut_origin[1] + 130  # 圆心
+        # donut 圆心：在 (0,0) 基础上相对于 donut_origin 的位置
         r_out, r_in = 117, 65
+        d_cx_rel, d_cy_rel = 130, 130  # donut 圆心在 translate group 内 (130, 130)
         lines.append(f'<g transform="translate({donut_origin[0]}, {donut_origin[1]})">')
-        # 图例（右侧方块 + 文字）
-        legend_group_x = 273
-        ly = 0
+        # 图例（右侧方块 + 文字）：donut 右边留空，图例从 x=273 开始，y 从 80 起往下排
+        legend_x = 273
         bar_w = 21.67
-        for name, color, pct in mini_items:
+        row_step = 34
+        for i, (name, color, pct) in enumerate(mini_items):
+            ly = 80 + i * row_step  # 图例顶部对齐在 y=80，依次往下
             lines.append(
-                f'<g transform="translate({legend_group_x}, {ly})">'
-                f'<rect x="0" y="{102.9 - ly}" width="{bar_w}" height="{bar_w}" fill="{color}" '
+                f'<rect x="{legend_x}" y="{ly}" width="{bar_w}" height="{bar_w}" fill="{color}" '
                 f'class="stroke-bg" stroke-width="1px"></rect>'
-                f'<text dominant-baseline="middle" x="26" y="{113.75 - ly}" class="fill-fg" '
-                f'font-size="21.67px">{html.escape(name)}</text>'
-                f'</g>')
-            ly += 32.5
+                f'<text dominant-baseline="middle" x="{legend_x + 28}" y="{ly + bar_w/2}" class="fill-fg" '
+                f'font-size="21.67px">{html.escape(name)}</text>')
         # donut
-        d_cx_rel, d_cy_rel = d_cx - donut_origin[0], d_cy - donut_origin[1]
         if len(mini_items) == 1:
             _, color, _ = mini_items[0]
             lines.append(
@@ -577,8 +603,6 @@ def render_gitblock(cells: list, months: list, theme: dict,
         else:
             start = -90.0
             total_pct = sum(pct for _, _, pct in mini_items)
-            # 用真实 pct 比例在 donut 里绘制（mini_items 截取到前 3 个，pct 总和可能 <100，
-            # 但 donut 这里就按它们的相对比例分满整圈，视觉上更清晰）
             acc = 0.0
             for name, color, pct in mini_items:
                 if pct <= 0:
@@ -743,43 +767,29 @@ def generate_demo() -> dict:
 def main() -> None:
     demo = "--demo" in sys.argv
     print(f"统计用户: {USERNAME}" + ("（演示模式，不调用 gh api）" if demo else ""))
-    if demo:
-        data = generate_demo()
-        repo_list = data["repo_list"]
-        lang_bytes, counts = data["langs"], data["counts"]
-        issue_count = data["issue_count"]
-        pr_count = data["pr_count"]
-        review_count = data["review_count"]
-    else:
-        repo_list = fetch_repos()
-        fork_count = sum(1 for r in repo_list if r.get("fork"))
-        print(f"仓库总数: {len(repo_list)}（其中 Fork {fork_count}）")
 
-        lang_bytes = Counter()
-        counts = Counter()
-        since = (date.today() - timedelta(days=371)).isoformat()
-        for r in repo_list:
-            name = r.get("name", "")
-            langs = fetch_languages(name)
-            for lang, size in langs.items():
-                lang_bytes[lang] += size
-            dates = fetch_commit_dates(name, since)
-            for ds in dates:
-                counts[ds] += 1
-            print(f"  {name}: 语言 {len(langs)} 种 / 提交 {len(dates)} 条")
+    # 使用共享数据层（避免重复 API 调用）
+    try:
+        from github_data import get_all_data, color_for_lang as shared_color
+        data = get_all_data(demo=demo)
+    except ImportError:
+        # 如果 github_data 不在路径里，加到 sys.path
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from github_data import get_all_data, color_for_lang as shared_color
+        data = get_all_data(demo=demo)
 
-        # Issue / PR / Review 数量（用 search API）
-        print("  抓取 Issue / PR / Review 统计...")
-        issue_count = fetch_search_count(f"is:issue author:{USERNAME}")
-        pr_count    = fetch_search_count(f"is:pr author:{USERNAME}")
-        # Review 很难精确统计，就用 PR 的一半估个低值（无对应 search 语法时置 0）
-        review_count = 0
-        try:
-            # 尝试用 GraphQL 或 search review comments 不行，这里简单置 0
-            pass
-        except Exception:
-            pass
-        print(f"    Issue={issue_count}, PR={pr_count}, Review={review_count}")
+    repo_list = data["repos"]
+    lang_bytes = data["lang_bytes"]
+    repo_commit_dates = data["repo_commit_dates"]
+    issue_count = data["issue_count"]
+    pr_count = data["pr_count"]
+    review_count = 0  # Review 无对应 search 语法，置 0
+
+    # 把 repo_commit_dates 展平为每日计数（与原 counts 结构一致）
+    counts = Counter()
+    for repo_dates in repo_commit_dates.values():
+        for ds in repo_dates:
+            counts[ds] += 1
 
     # ---- 汇总 stats ----
     total_commits = sum(counts.values())

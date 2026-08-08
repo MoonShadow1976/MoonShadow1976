@@ -49,5 +49,12 @@
   </tr>
 </table>
 
-<p align="center"><sub>📋 <a href="reports/contribution-report.md">我的贡献报告（每日自动更新）</a></sub></p>
+<table align="center" width="100%">
+  <tr>
+    <td align="center">
+      <img alt="语言 → 项目 流向（桑基图）" src="./profile/lang-repo-sankey.svg?sanitize=true" width="100%" />
+      <p><sub>语言使用 → 项目贡献 流向（Top 10 项目）</sub></p>
+    </td>
+  </tr>
+</table>
 
