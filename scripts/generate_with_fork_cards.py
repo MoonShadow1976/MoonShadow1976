@@ -436,6 +436,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
     levels = theme["levels"]  # [(top_hsl, left_rgb, right_rgb), ...]
     radar_stroke = theme["radar_stroke"]
     radar_fill = theme["radar_fill"]
+    grid_line = theme.get("grid_line", theme.get("weak", "gray"))  # 底部灰底的网格线颜色
 
     font = 'font-family: "Ubuntu", "Helvetica", "Arial", sans-serif;'
 
@@ -498,7 +499,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
             lines.append(
                 f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
                 f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-                f'fill="{top_c}"/>')
+                f'fill="{top_c}" stroke="{grid_line}" stroke-width="0.6"/>')
         else:
             # 左侧面（左下前侧）：C → D → Dt → Ct
             lines.append(
@@ -663,6 +664,7 @@ GITBLOCK_THEME = {
     "weak": "gray",
     "radar_stroke": "#47a042",
     "radar_fill":   "#47a042",
+    "grid_line": "#a0a0a0",  # 底部灰底的深灰色网格线
     "levels": [
         # level 0 灰底（无提交）
         ("#f8f8f8", "rgb(207, 207, 207)", "rgb(174, 174, 174)"),
@@ -685,6 +687,7 @@ NIGHT_GREEN_THEME = {
     "weak": "#6e7681",
     "radar_stroke": "#3fb950",
     "radar_fill":   "#2ea043",
+    "grid_line": "#30363d",  # 暗夜主题的深灰色网格线
     "levels": [
         ("#161b22", "#10151c", "#131a21"),
         ("#0e4429", "#0a3a22", "#0b3f25"),
