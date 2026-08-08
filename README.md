@@ -8,7 +8,7 @@
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="./profile/top-langs-dark.svg?sanitize=true">
         <source media="(prefers-color-scheme: light)" srcset="./profile/top-langs-light.svg?sanitize=true">
-        <img alt="Most Used Languages" src="./profile/top-langs-light.svg?sanitize=true" width="300" />
+        <img alt="Most Used Languages" src="./profile/top-langs-light.svg?sanitize=true" width="300" height="375" />
       </picture>
       <p><sub>语言使用情况</sub></p>
     </td>
@@ -16,11 +16,14 @@
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="./profile/top-langs-with-forks-dark.svg?sanitize=true">
         <source media="(prefers-color-scheme: light)" srcset="./profile/top-langs-with-forks-light.svg?sanitize=true">
-        <img alt="Most Used Languages (incl. forks)" src="./profile/top-langs-with-forks-light.svg?sanitize=true" width="300" />
+        <img alt="Most Used Languages (incl. forks)" src="./profile/top-langs-with-forks-light.svg?sanitize=true" width="300" height="375" />
       </picture>
       <p><sub>语言使用情况（含 Fork）</sub></p>
     </td>
   </tr>
+</table>
+
+<table align="center" width="100%">
   <tr>
     <td align="center">
       <picture>
@@ -30,6 +33,11 @@
       </picture>
       <p><sub>3D 贡献统计</sub></p>
     </td>
+  </tr>
+</table>
+
+<table align="center" width="100%">
+  <tr>
     <td align="center">
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="./profile-3d-contrib/profile-night-green-with-forks.svg?sanitize=true">
