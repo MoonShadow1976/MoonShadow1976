@@ -1,0 +1,25 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+  # 仅启用会产生真实错误的规则：
+  "F",     # Pyflakes：未定义、未使用、重复导入
+  "E",     # 语法/缩进/解析错误（去掉 line-length 告警）
+  "I",     # 导入排序
+  "UP",    # pyupgrade：Python 现代写法（避免老坑）
+]
+ignore = [
+  # SVG/HTML 拼接行普遍较长；统计打印带 f-string 模板也长
+  "E501",  # line-too-long
+  # 网格循环里 `lvl`, `rows`, `cols` 等命名是惯例
+  "E741",  # ambiguous-variable-name
+  # 不做 printf 格式强制：脚本内日志 `%s` 与 f-string 都可
+  "UP031",
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+

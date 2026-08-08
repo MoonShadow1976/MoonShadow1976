@@ -1,46 +1,66 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="680" viewBox="0 0 1600 680">
-<style>.title{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}.sub{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}.label{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.legend-label{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.tick{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}.axis{stroke:#e4e2e2;stroke-width:1px;}.grid{stroke:#f0f0f0;stroke-width:1px;}</style>
+<style>.title{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}.sub{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}.label{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.legend-label{font:400 14px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.tick{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}.axis{stroke:#e4e2e2;stroke-width:1px;}.grid{stroke:#f0f0f0;stroke-width:1px;}</style>
 <rect width="1600" height="680" fill="#ffffff"/>
 <text x="800.0" y="28" text-anchor="middle" class="title">语言 → 项目 流向分析</text>
-<path d="M60.0,519.9 C800.0,519.9 800.0,279.6 1540.0,279.6 L1540.0,279.6 C800.0,279.6 800.0,532.5 60.0,532.5 Z" fill="#bb6bd9" fill-opacity="0.60" stroke="#bb6bd9" stroke-width="0.3"/>
-<path d="M60.0,458.2 C800.0,458.2 800.0,527.5 1540.0,527.5 L1540.0,538.9 C800.0,538.9 800.0,458.2 60.0,458.2 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,501.3 C800.0,501.3 800.0,279.5 1540.0,279.5 L1540.0,279.6 C800.0,279.6 800.0,513.9 60.0,513.9 Z" fill="#384D54" fill-opacity="0.60" stroke="#384D54" stroke-width="0.3"/>
-<path d="M60.0,494.8 C800.0,494.8 800.0,451.5 1540.0,451.5 L1540.0,452.0 C800.0,452.0 800.0,495.3 60.0,495.3 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,457.0 C800.0,457.0 800.0,510.2 1540.0,510.2 L1540.0,521.5 C800.0,521.5 800.0,458.2 60.0,458.2 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,492.6 C800.0,492.6 800.0,492.8 1540.0,492.8 L1540.0,504.2 C800.0,504.2 800.0,494.8 60.0,494.8 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,454.9 C800.0,454.9 800.0,475.4 1540.0,475.4 L1540.0,486.8 C800.0,486.8 800.0,457.0 60.0,457.0 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,450.8 C800.0,450.8 800.0,458.0 1540.0,458.0 L1540.0,469.4 C800.0,469.4 800.0,454.9 60.0,454.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,482.8 C800.0,482.8 800.0,406.8 1540.0,406.8 L1540.0,414.7 C800.0,414.7 800.0,492.6 60.0,492.6 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,464.2 C800.0,464.2 800.0,440.5 1540.0,440.5 L1540.0,451.5 C800.0,451.5 800.0,476.8 60.0,476.8 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
-<path d="M60.0,435.5 C800.0,435.5 800.0,420.7 1540.0,420.7 L1540.0,434.5 C800.0,434.5 800.0,450.8 60.0,450.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,301.9 C800.0,301.9 800.0,285.6 1540.0,285.6 L1540.0,406.8 C800.0,406.8 800.0,435.5 60.0,435.5 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,279.5 C800.0,279.5 800.0,301.9 60.0,301.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<rect x="40" y="60.0" width="20" height="398.2" fill="#3572A5" rx="2"/>
-<rect x="40" y="464.2" width="20" height="12.6" fill="#DEA584" rx="2"/>
-<rect x="40" y="482.8" width="20" height="12.6" fill="#E34C26" rx="2"/>
-<rect x="40" y="501.3" width="20" height="12.6" fill="#384D54" rx="2"/>
-<rect x="40" y="519.9" width="20" height="12.6" fill="#bb6bd9" rx="2"/>
-<rect x="1540" y="60.0" width="20" height="219.6" fill="#2f80ed" rx="2"/>
-<rect x="1540" y="285.6" width="20" height="129.1" fill="#eb5757" rx="2"/>
-<rect x="1540" y="420.7" width="20" height="13.8" fill="#f2994a" rx="2"/>
-<rect x="1540" y="440.5" width="20" height="11.5" fill="#56ccf2" rx="2"/>
-<rect x="1540" y="458.0" width="20" height="11.4" fill="#bb6bd9" rx="2"/>
-<rect x="1540" y="475.4" width="20" height="11.4" fill="#27ae60" rx="2"/>
-<rect x="1540" y="492.8" width="20" height="11.4" fill="#e91e63" rx="2"/>
-<rect x="1540" y="510.2" width="20" height="11.4" fill="#00bcd4" rx="2"/>
-<rect x="1540" y="527.5" width="20" height="11.4" fill="#ff5722" rx="2"/>
-<rect x="641.0" y="571.0" width="9" height="9" fill="#3572A5" rx="2"/><text x="654.0" y="579.0" class="legend-label" text-anchor="start">Python</text>
-<rect x="704.0" y="571.0" width="9" height="9" fill="#DEA584" rx="2"/><text x="717.0" y="579.0" class="legend-label" text-anchor="start">Rust</text>
-<rect x="754.0" y="571.0" width="9" height="9" fill="#E34C26" rx="2"/><text x="767.0" y="579.0" class="legend-label" text-anchor="start">HTML</text>
-<rect x="804.0" y="571.0" width="9" height="9" fill="#384D54" rx="2"/><text x="817.0" y="579.0" class="legend-label" text-anchor="start">Dockerfile</text>
-<rect x="893.0" y="571.0" width="9" height="9" fill="#bb6bd9" rx="2"/><text x="906.0" y="579.0" class="legend-label" text-anchor="start">Mustache</text>
-<rect x="8.0" y="616.0" width="9" height="9" fill="#2f80ed" rx="2"/><text x="21.0" y="624.0" class="legend-label" text-anchor="start">gsuid_core</text>
-<rect x="97.0" y="616.0" width="9" height="9" fill="#eb5757" rx="2"/><text x="110.0" y="624.0" class="legend-label" text-anchor="start">WutheringWavesUID</text>
-<rect x="231.5" y="616.0" width="9" height="9" fill="#f2994a" rx="2"/><text x="244.5" y="624.0" class="legend-label" text-anchor="start">astrbot_plugin_livingmemory</text>
-<rect x="431.0" y="616.0" width="9" height="9" fill="#56ccf2" rx="2"/><text x="444.0" y="624.0" class="legend-label" text-anchor="start">blackhole_sim</text>
-<rect x="539.5" y="616.0" width="9" height="9" fill="#bb6bd9" rx="2"/><text x="552.5" y="624.0" class="legend-label" text-anchor="start">MoonShadow1976</text>
-<rect x="654.5" y="616.0" width="9" height="9" fill="#27ae60" rx="2"/><text x="667.5" y="624.0" class="legend-label" text-anchor="start">wutheringwaves_gacha_record_converter</text>
-<rect x="919.0" y="616.0" width="9" height="9" fill="#e91e63" rx="2"/><text x="932.0" y="624.0" class="legend-label" text-anchor="start">WutheringWaves_RedBlackList</text>
-<rect x="1118.5" y="616.0" width="9" height="9" fill="#00bcd4" rx="2"/><text x="1131.5" y="624.0" class="legend-label" text-anchor="start">astrbot_plugin_ExchangeRateQuery</text>
-<rect x="1350.5" y="616.0" width="9" height="9" fill="#ff5722" rx="2"/><text x="1363.5" y="624.0" class="legend-label" text-anchor="start">WutheringWaves_OverSea_StaticAssets</text>
+<path d="M60.0,344.3 C800.0,344.3 800.0,372.0 1540.0,372.0 L1540.0,376.2 C800.0,376.2 800.0,348.7 60.0,348.7 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,427.9 C800.0,427.9 800.0,314.1 1540.0,314.1 L1540.0,318.3 C800.0,318.3 800.0,432.3 60.0,432.3 Z" fill="#41B883" fill-opacity="0.60" stroke="#41B883" stroke-width="0.3"/>
+<path d="M60.0,338.9 C800.0,338.9 800.0,494.3 1540.0,494.3 L1540.0,499.5 C800.0,499.5 800.0,344.3 60.0,344.3 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,298.2 C800.0,298.2 800.0,417.6 1540.0,417.6 L1540.0,423.1 C800.0,423.1 800.0,303.9 60.0,303.9 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
+<path d="M60.0,421.6 C800.0,421.6 800.0,482.3 1540.0,482.3 L1540.0,488.3 C800.0,488.3 800.0,427.9 60.0,427.9 Z" fill="#41B883" fill-opacity="0.60" stroke="#41B883" stroke-width="0.3"/>
+<path d="M60.0,498.0 C800.0,498.0 800.0,521.0 1540.0,521.0 L1540.0,527.6 C800.0,527.6 800.0,504.9 60.0,504.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,527.2 C800.0,527.2 800.0,527.6 1540.0,527.6 L1540.0,535.6 C800.0,535.6 800.0,535.6 60.0,535.6 Z" fill="#F34B7D" fill-opacity="0.60" stroke="#F34B7D" stroke-width="0.3"/>
+<path d="M60.0,510.9 C800.0,510.9 800.0,499.5 1540.0,499.5 L1540.0,515.0 C800.0,515.0 800.0,527.2 60.0,527.2 Z" fill="#F34B7D" fill-opacity="0.60" stroke="#F34B7D" stroke-width="0.3"/>
+<path d="M60.0,476.3 C800.0,476.3 800.0,192.0 1540.0,192.0 L1540.0,212.6 C800.0,212.6 800.0,498.0 60.0,498.0 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,109.6 C800.0,109.6 800.0,324.3 1540.0,324.3 L1540.0,366.0 C800.0,366.0 800.0,131.9 60.0,131.9 Z" fill="#89E051" fill-opacity="0.60" stroke="#89E051" stroke-width="0.3"/>
+<path d="M60.0,398.0 C800.0,398.0 800.0,246.1 1540.0,246.1 L1540.0,268.6 C800.0,268.6 800.0,421.6 60.0,421.6 Z" fill="#41B883" fill-opacity="0.60" stroke="#41B883" stroke-width="0.3"/>
+<path d="M60.0,179.4 C800.0,179.4 800.0,459.5 1540.0,459.5 L1540.0,482.3 C800.0,482.3 800.0,203.4 60.0,203.4 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
+<path d="M60.0,309.9 C800.0,309.9 800.0,218.6 1540.0,218.6 L1540.0,246.1 C800.0,246.1 800.0,338.9 60.0,338.9 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,438.3 C800.0,438.3 800.0,423.1 1540.0,423.1 L1540.0,453.5 C800.0,453.5 800.0,470.3 60.0,470.3 Z" fill="#00ADD8" fill-opacity="0.60" stroke="#00ADD8" stroke-width="0.3"/>
+<path d="M60.0,263.7 C800.0,263.7 800.0,105.9 1540.0,105.9 L1540.0,138.8 C800.0,138.8 800.0,298.2 60.0,298.2 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
+<path d="M60.0,354.7 C800.0,354.7 800.0,376.2 1540.0,376.2 L1540.0,411.6 C800.0,411.6 800.0,392.0 60.0,392.0 Z" fill="#384D54" fill-opacity="0.60" stroke="#384D54" stroke-width="0.3"/>
+<path d="M60.0,137.9 C800.0,137.9 800.0,274.6 1540.0,274.6 L1540.0,314.1 C800.0,314.1 800.0,179.4 60.0,179.4 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
+<path d="M60.0,209.4 C800.0,209.4 800.0,60.0 1540.0,60.0 L1540.0,105.9 C800.0,105.9 800.0,257.7 60.0,257.7 Z" fill="#563D7C" fill-opacity="0.60" stroke="#563D7C" stroke-width="0.3"/>
+<path d="M60.0,60.0 C800.0,60.0 800.0,144.8 1540.0,144.8 L1540.0,192.0 C800.0,192.0 800.0,109.6 60.0,109.6 Z" fill="#89E051" fill-opacity="0.60" stroke="#89E051" stroke-width="0.3"/>
+<rect x="40" y="60.0" width="20" height="71.9" fill="#89E051" rx="2"/>
+<rect x="40" y="137.9" width="20" height="65.5" fill="#3178C6" rx="2"/>
+<rect x="40" y="209.4" width="20" height="48.3" fill="#563D7C" rx="2"/>
+<rect x="40" y="263.7" width="20" height="40.3" fill="#DEA584" rx="2"/>
+<rect x="40" y="309.9" width="20" height="38.8" fill="#E34C26" rx="2"/>
+<rect x="40" y="354.7" width="20" height="37.3" fill="#384D54" rx="2"/>
+<rect x="40" y="398.0" width="20" height="34.3" fill="#41B883" rx="2"/>
+<rect x="40" y="438.3" width="20" height="32.0" fill="#00ADD8" rx="2"/>
+<rect x="40" y="476.3" width="20" height="28.6" fill="#3572A5" rx="2"/>
+<rect x="40" y="510.9" width="20" height="24.6" fill="#F34B7D" rx="2"/>
+<rect x="1540" y="60.0" width="20" height="78.8" fill="#2f80ed" rx="2"/>
+<rect x="1540" y="144.8" width="20" height="67.8" fill="#eb5757" rx="2"/>
+<rect x="1540" y="218.6" width="20" height="50.0" fill="#f2994a" rx="2"/>
+<rect x="1540" y="274.6" width="20" height="43.7" fill="#56ccf2" rx="2"/>
+<rect x="1540" y="324.3" width="20" height="41.7" fill="#bb6bd9" rx="2"/>
+<rect x="1540" y="372.0" width="20" height="39.6" fill="#27ae60" rx="2"/>
+<rect x="1540" y="417.6" width="20" height="35.9" fill="#e91e63" rx="2"/>
+<rect x="1540" y="459.5" width="20" height="28.8" fill="#00bcd4" rx="2"/>
+<rect x="1540" y="494.3" width="20" height="20.7" fill="#ff5722" rx="2"/>
+<rect x="1540" y="521.0" width="20" height="14.5" fill="#795548" rx="2"/>
+<text x="800.0" y="560" text-anchor="middle" class="sub">语言</text>
+<rect x="447.0" y="574.0" width="14" height="14" fill="#89E051" rx="2"/><text x="467.0" y="586.0" class="legend-label" text-anchor="start">Shell</text>
+<rect x="519.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="539.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
+<rect x="631.0" y="574.0" width="14" height="14" fill="#563D7C" rx="2"/><text x="651.0" y="586.0" class="legend-label" text-anchor="start">CSS</text>
+<rect x="687.0" y="574.0" width="14" height="14" fill="#DEA584" rx="2"/><text x="707.0" y="586.0" class="legend-label" text-anchor="start">Rust</text>
+<rect x="751.0" y="574.0" width="14" height="14" fill="#E34C26" rx="2"/><text x="771.0" y="586.0" class="legend-label" text-anchor="start">HTML</text>
+<rect x="815.0" y="574.0" width="14" height="14" fill="#384D54" rx="2"/><text x="835.0" y="586.0" class="legend-label" text-anchor="start">Dockerfile</text>
+<rect x="927.0" y="574.0" width="14" height="14" fill="#41B883" rx="2"/><text x="947.0" y="586.0" class="legend-label" text-anchor="start">Vue</text>
+<rect x="983.0" y="574.0" width="14" height="14" fill="#00ADD8" rx="2"/><text x="1003.0" y="586.0" class="legend-label" text-anchor="start">Go</text>
+<rect x="1031.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="1051.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
+<rect x="1111.0" y="574.0" width="14" height="14" fill="#F34B7D" rx="2"/><text x="1131.0" y="586.0" class="legend-label" text-anchor="start">C++</text>
+<text x="800.0" y="612" text-anchor="middle" class="sub">仓库</text>
+<rect x="55.0" y="629.0" width="14" height="14" fill="#2f80ed" rx="2"/><text x="75.0" y="641.0" class="legend-label" text-anchor="start">cli-toolbox</text>
+<rect x="175.0" y="629.0" width="14" height="14" fill="#eb5757" rx="2"/><text x="195.0" y="641.0" class="legend-label" text-anchor="start">legacy-fork-webpy</text>
+<rect x="343.0" y="629.0" width="14" height="14" fill="#f2994a" rx="2"/><text x="363.0" y="641.0" class="legend-label" text-anchor="start">infra-as-code</text>
+<rect x="479.0" y="629.0" width="14" height="14" fill="#56ccf2" rx="2"/><text x="499.0" y="641.0" class="legend-label" text-anchor="start">moon-ai-assistant</text>
+<rect x="647.0" y="629.0" width="14" height="14" fill="#bb6bd9" rx="2"/><text x="667.0" y="641.0" class="legend-label" text-anchor="start">ml-experiment-lab</text>
+<rect x="815.0" y="629.0" width="14" height="14" fill="#27ae60" rx="2"/><text x="835.0" y="641.0" class="legend-label" text-anchor="start">devops-playground</text>
+<rect x="983.0" y="629.0" width="14" height="14" fill="#e91e63" rx="2"/><text x="1003.0" y="641.0" class="legend-label" text-anchor="start">dotfiles-public</text>
+<rect x="1135.0" y="629.0" width="14" height="14" fill="#00bcd4" rx="2"/><text x="1155.0" y="641.0" class="legend-label" text-anchor="start">blog-engine-theme</text>
+<rect x="1303.0" y="629.0" width="14" height="14" fill="#ff5722" rx="2"/><text x="1323.0" y="641.0" class="legend-label" text-anchor="start">docs-site</text>
+<rect x="1407.0" y="629.0" width="14" height="14" fill="#795548" rx="2"/><text x="1427.0" y="641.0" class="legend-label" text-anchor="start">rust-wasm-utils</text>
 </svg>

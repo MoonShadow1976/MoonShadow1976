@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 生成「包含 Fork 仓库」的 GitHub 主页卡片
 ========================================
@@ -192,7 +191,7 @@ def render_lang_card(items: list, theme: dict) -> str:
     body_offset_y = 70          # 饼图+图例整体下移（为 subtitle 留空间）
     pie_cx, pie_cy, pie_r = 150, 105, 85
     legend_body_y = 205         # 图例在 body 中的起始 y
-    col_x_left, col_x_right = 25, 150   # 两列图例起点 x
+    col_x_right = 150           # 右列图例起点 x（左列起点 x=25，内嵌在 transform 常量里）
     row_h = 18                  # 单行高度（10 项压缩到 5 行 × 18px）
     legend_circle_r = 5
     text_dx = 15                # 文字相对圆心右偏移
@@ -228,24 +227,24 @@ def render_lang_card(items: list, theme: dict) -> str:
     lines = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
         f'viewBox="0 0 {W} {H}" fill="none" role="img" aria-labelledby="descId">',
-        f'<title id="titleId"></title><desc id="descId"></desc>',
+        '<title id="titleId"></title><desc id="descId"></desc>',
         style,
         f'<rect data-testid="card-bg" x="0.5" y="0.5" rx="{rx}" height="99%" '
         f'stroke="#e4e2e2" width="299" fill="{theme["bg"]}" stroke-opacity="0"/>',
         # 标题（在 25, 35 位置居中？左对齐 — 模仿左边 translate(25, 35) 然后 x=0）
-        f'<g data-testid="card-title" transform="translate(25, 35)">',
-        f'  <g transform="translate(0, 0)">',
+        '<g data-testid="card-title" transform="translate(25, 35)">',
+        '  <g transform="translate(0, 0)">',
         f'    <text x="0" y="0" class="header" data-testid="header">'
         f'{html.escape(LANG_TITLE)}</text>',
-        f'  </g>',
-        f'</g>',
+        '  </g>',
+        '</g>',
         # subtitle（仅右边含 Fork 卡片有）
-        f'<g transform="translate(25, 52)">',
+        '<g transform="translate(25, 52)">',
         f'  <text x="0" y="0" class="sub">{html.escape(LANG_SUBTITLE)}</text>',
-        f'</g>',
+        '</g>',
         # 主体
         f'<g data-testid="main-card-body" transform="translate(0, {body_offset_y})">',
-        f'  <svg data-testid="lang-items">',
+        '  <svg data-testid="lang-items">',
     ]
 
     # 饼图扇区
@@ -269,13 +268,10 @@ def render_lang_card(items: list, theme: dict) -> str:
     # 图例：两列布局
     half = (len(items) + 1) // 2
     lines.append(f'    <g transform="translate(0, {legend_body_y})">')
-    lines.append(f'      <svg data-testid="lang-names" x="0">')
+    lines.append('      <svg data-testid="lang-names" x="25">')
     # 左列
     for i, (name, color, pct) in enumerate(items[:half]):
         delay = 450 + 150 * i
-        cx = col_x_left + legend_circle_r
-        cy = 6 + i * row_h
-        text_y = 10 + i * row_h
         lines.append(
             f'        <g transform="translate(0, {i * row_h})">'
             f'<g class="stagger" style="animation-delay: {delay}ms">'
@@ -293,10 +289,10 @@ def render_lang_card(items: list, theme: dict) -> str:
             f'<text data-testid="lang-name" x="{text_dx}" y="{10}" class="lang-name">'
             f'{html.escape(name)} {pct:.2f}%'
             f'</text></g></g>')
-    lines.append(f'      </svg>')
-    lines.append(f'    </g>')
-    lines.append(f'  </svg>')
-    lines.append(f'</g>')
+    lines.append('      </svg>')
+    lines.append('    </g>')
+    lines.append('  </svg>')
+    lines.append('</g>')
     lines.append("</svg>")
     return "\n".join(lines)
 
@@ -442,7 +438,6 @@ def render_gitblock(cells: list, months: list, theme: dict,
     radar_fill = theme["radar_fill"]
 
     font = 'font-family: "Ubuntu", "Helvetica", "Arial", sans-serif;'
-    font_attr = f'font-family="Ubuntu, Helvetica, Arial, sans-serif"'
 
     # ===== 2. 构建 SVG =====
     lines = [
@@ -465,7 +460,6 @@ def render_gitblock(cells: list, months: list, theme: dict,
     # 预计算所有单元格的顶点坐标，再按 level 绘制（相同 level 可以批量绘制以减少标签数）
     # 单元底面 4 顶点（菱形）：A(顶), B(右), C(左), D(底)
     # col 方向向量 (20, 11.547)；row 方向向量 (-20, 11.547)
-    COS30 = math.cos(math.radians(30))  # 0.866025...
 
     # 收集所有单元格到统一列表，按 (col+row, level) 排序后一次性绘制
     # 排序规则：col+row 小的（远/后）先画，同深度下 level 小的（矮）先画
@@ -573,7 +567,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
     poly_pts = " ".join(f"{_radar_point(val_to_radius(v), i)[0]:.2f},{_radar_point(val_to_radius(v), i)[1]:.2f}"
                         for i, v in enumerate(raw_values))
     lines.append(f'<polygon class="radar" points="{poly_pts}"></polygon>')
-    lines.append(f'</g>')
+    lines.append('</g>')
 
     # ===== 5. 迷你环形图 + 语言图例（左下 translate(40, 520)）=====
     donut_origin = (40, 520)
@@ -623,7 +617,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
                     f'<title>{html.escape(name)} {pct:.1f}%</title></path>')
                 start = end
                 acc += pct
-        lines.append(f'</g>')
+        lines.append('</g>')
 
     # ===== 6. 底部统计行：contributions + stars + PRs =====
     total_contrib = stats.get("total_commits", 0)
@@ -635,7 +629,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
                  '018 .25zm0 2.445L6.615 5.5a.75.75 0 01-.564.41l-3.097.45 2.24 2.184a.75.75 0 '
                  '01.216.664l-.528 3.084 2.769-1.456a.75.75 0 01.698 0l2.77 1.456-.53-3.084a.75.75 0 '
                  '01.216-.664l2.24-2.183-3.096-.45a.75.75 0 01-.564-.41L8 2.694v.001z" '
-                 f'class="fill-fg"></path>')
+                 'class="fill-fg"></path>')
     pr_path = ('<path fill-rule="evenodd" d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 '
                '2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 '
                '2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 '
@@ -670,16 +664,16 @@ GITBLOCK_THEME = {
     "radar_stroke": "#47a042",
     "radar_fill":   "#47a042",
     "levels": [
-        # level 0
+        # level 0 灰底（无提交）
         ("#f8f8f8", "rgb(207, 207, 207)", "rgb(174, 174, 174)"),
-        # level 1 绿（hsl(125, 52%, 50%)）
-        ("hsl(125, 52%, 50%)", "rgb(51, 162, 60)", "rgb(43, 136, 51)"),
-        # level 2 蓝紫
-        ("hsl(242, 100%, 65%)", "rgb(69, 64, 213)", "rgb(58, 54, 179)"),
-        # level 3 黄
-        ("hsl(48, 100%, 50%)",  "rgb(213, 171, 0)", "rgb(179, 143, 0)"),
-        # level 4 红
-        ("hsl(350, 100%, 50%)", "rgb(213, 0, 36)",  "rgb(179, 0, 30)"),
+        # level 1 绿（低）
+        ("hsl(140, 70%, 45%)", "rgb(40, 167, 69)", "rgb(34, 141, 58)"),
+        # level 2 蓝（中低）
+        ("hsl(210, 88%, 52%)", "rgb(26, 131, 220)", "rgb(22, 109, 183)"),
+        # level 3 黄（中高）
+        ("hsl(48, 100%, 54%)", "rgb(230, 177, 0)", "rgb(192, 148, 0)"),
+        # level 4 红（高）
+        ("hsl(4, 90%, 56%)",  "rgb(229, 56, 59)",  "rgb(192, 47, 50)"),
     ],
 }
 
@@ -770,12 +764,12 @@ def main() -> None:
 
     # 使用共享数据层（避免重复 API 调用）
     try:
-        from github_data import get_all_data, color_for_lang as shared_color
+        from github_data import get_all_data
         data = get_all_data(demo=demo)
     except ImportError:
         # 如果 github_data 不在路径里，加到 sys.path
         sys.path.insert(0, str(Path(__file__).resolve().parent))
-        from github_data import get_all_data, color_for_lang as shared_color
+        from github_data import get_all_data
         data = get_all_data(demo=demo)
 
     repo_list = data["repos"]
