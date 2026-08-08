@@ -3,7 +3,7 @@
 > 由 GitHub Actions 每日自动生成 · 所有数据匿名化处理
 
 - **统计范围**: 所有公开仓库（**含 Fork**）
-- **生成时间**: 2026-08-08 12:04 UTC
+- **生成时间**: UTC 2026-08-08 11:42:13
 
 <table align="center" width="100%"><tr>
 <td align="center"><b style="font-size:28px;">468</b><br><sub>提交总数</sub></td>
@@ -14,7 +14,13 @@
 <td align="center"><b style="font-size:28px;">36</b><br><sub>Issue</sub></td>
 </tr></table>
 
-## 🔀 语言 → 项目 流向
+| 指标 | 数值 |
+|---|---|
+| 提交总数 | **1118** |
+| 覆盖仓库数 | 39（其中 Fork 25） |
+| 首次提交 | 2023-12-19 |
+| 最近提交 | 2026-08-08 |
+| 提交者身份数 | 4 |
 
 <div align="center">
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
@@ -51,7 +57,23 @@
 </svg>
 </div>
 
-## 💻 语言使用分布
+| 仓库 | 提交数 |
+|---|---|
+| `WutheringWavesUID` | 805 |
+| `WutheringWaves_OverSea_StaticAssets` | 110 |
+| `gsuid_core` | 58 |
+| `blackhole_sim` | 33 |
+| `ChineseBQB` | 29 |
+| `WutheringWaves_RedBlackList` | 24 |
+| `webgis` | 12 |
+| `wutheringwaves_gacha_record_converter` | 12 |
+| `astrbot_plugin_ExchangeRateQuery` | 9 |
+| `MoonShadow1976` | 5 |
+| `MsTry` | 5 |
+| `sql_-map-gbt` | 4 |
+| `WuWaUID-OnlySign` | 4 |
+| `astrbot_plugin_livingmemory` | 2 |
+| `mpvue2WeChatMiniProgram` | 2 |
 
 <div align="center">
 <svg xmlns="http://www.w3.org/2000/svg" width="380" height="320" viewBox="0 0 380 320">
@@ -80,7 +102,12 @@
 </svg>
 </div>
 
-## 📈 月度提交趋势
+| 提交者 | 提交数 |
+|---|---|
+| eli stewart <3483948113@qq.com> | 816 |
+| MoonShadow1976 <154309554+MoonShadow1976@users.noreply.github.com> | 287 |
+| MoonShadow1976 <MoonShadow1976@outlook.com> | 14 |
+| Eli Stewart <3483948113@qq.com> | 1 |
 
 <div align="center">
 <svg xmlns="http://www.w3.org/2000/svg" width="780" height="260" viewBox="0 0 780 260">
@@ -108,7 +135,20 @@
 </svg>
 </div>
 
-## 📁 项目贡献排行
+```text
+2025-09 ███████████████░░░░░░░ 61
+2025-10 ███████████░░░░░░░░░░░ 44
+2025-11 ███████░░░░░░░░░░░░░░░ 29
+2025-12 ██████████████████████ 88
+2026-01 ████████████░░░░░░░░░░ 48
+2026-02 █████████████░░░░░░░░░ 53
+2026-03 ██████████████████░░░░ 73
+2026-04 ████████████░░░░░░░░░░ 47
+2026-05 ███████░░░░░░░░░░░░░░░ 29
+2026-06 ████████████░░░░░░░░░░ 49
+2026-07 █████████████████░░░░░ 69
+2026-08 ██░░░░░░░░░░░░░░░░░░░░ 6
+```
 
 <div align="center">
 <svg xmlns="http://www.w3.org/2000/svg" width="780" height="260" viewBox="0 0 780 260">
@@ -134,7 +174,15 @@
 </svg>
 </div>
 
-## 🗓 星期分布
+```text
+周一 ██████████████░ 180
+周二 █████████████░░ 166
+周三 ███████████░░░░ 145
+周四 ███████████████ 191
+周五 ██████████░░░░░ 133
+周六 ████████████░░░ 153
+周日 ████████████░░░ 150
+```
 
 <div align="center">
 <svg xmlns="http://www.w3.org/2000/svg" width="780" height="260" viewBox="0 0 780 260">
@@ -157,45 +205,32 @@
 </svg>
 </div>
 
-## 🕐 小时分布
-
-<div align="center">
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260">
-<style>.title{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}.sub{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}.label{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.tick{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}.axis{stroke:#e4e2e2;stroke-width:1px;}.grid{stroke:#f0f0f0;stroke-width:1px;}</style>
-<rect width="900" height="260" fill="#ffffff"/>
-<text x="450.0" y="22" text-anchor="middle" class="title">按小时分布（UTC）</text>
-<line x1="50" y1="40.0" x2="880" y2="40.0" class="grid"/><text x="44" y="43.0" text-anchor="end" class="tick">468</text>
-<line x1="50" y1="85.0" x2="880" y2="85.0" class="grid"/><text x="44" y="88.0" text-anchor="end" class="tick">351</text>
-<line x1="50" y1="130.0" x2="880" y2="130.0" class="grid"/><text x="44" y="133.0" text-anchor="end" class="tick">234</text>
-<line x1="50" y1="175.0" x2="880" y2="175.0" class="grid"/><text x="44" y="178.0" text-anchor="end" class="tick">117</text>
-<line x1="50" y1="220.0" x2="880" y2="220.0" class="grid"/><text x="44" y="223.0" text-anchor="end" class="tick">0</text>
-<line x1="50" y1="40" x2="50" y2="220" class="axis"/><line x1="50" y1="220" x2="880" y2="220" class="axis"/>
-<rect x="50.0" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="65.4" y="216.0" text-anchor="middle" class="tick">0</text><text x="65.4" y="234.0" text-anchor="middle" class="tick">00:00</text>
-<rect x="84.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="100.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="100.1" y="234.0" text-anchor="middle" class="tick">01:00</text>
-<rect x="119.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="134.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="134.9" y="234.0" text-anchor="middle" class="tick">02:00</text>
-<rect x="154.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="169.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="169.6" y="234.0" text-anchor="middle" class="tick">03:00</text>
-<rect x="189.0" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="204.4" y="216.0" text-anchor="middle" class="tick">0</text><text x="204.4" y="234.0" text-anchor="middle" class="tick">04:00</text>
-<rect x="223.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="239.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="239.1" y="234.0" text-anchor="middle" class="tick">05:00</text>
-<rect x="258.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="273.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="273.9" y="234.0" text-anchor="middle" class="tick">06:00</text>
-<rect x="293.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="308.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="308.6" y="234.0" text-anchor="middle" class="tick">07:00</text>
-<rect x="328.0" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="343.4" y="216.0" text-anchor="middle" class="tick">0</text><text x="343.4" y="234.0" text-anchor="middle" class="tick">08:00</text>
-<rect x="362.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="378.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="378.1" y="234.0" text-anchor="middle" class="tick">09:00</text>
-<rect x="397.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="412.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="412.9" y="234.0" text-anchor="middle" class="tick">10:00</text>
-<rect x="432.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="447.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="447.6" y="234.0" text-anchor="middle" class="tick">11:00</text>
-<rect x="467.0" y="40.0" width="30.8" height="180.0" fill="#56ccf2" rx="2"/><text x="482.4" y="36.0" text-anchor="middle" class="tick">468</text><text x="482.4" y="234.0" text-anchor="middle" class="tick">12:00</text>
-<rect x="501.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="517.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="517.1" y="234.0" text-anchor="middle" class="tick">13:00</text>
-<rect x="536.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="551.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="551.9" y="234.0" text-anchor="middle" class="tick">14:00</text>
-<rect x="571.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="586.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="586.6" y="234.0" text-anchor="middle" class="tick">15:00</text>
-<rect x="606.0" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="621.4" y="216.0" text-anchor="middle" class="tick">0</text><text x="621.4" y="234.0" text-anchor="middle" class="tick">16:00</text>
-<rect x="640.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="656.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="656.1" y="234.0" text-anchor="middle" class="tick">17:00</text>
-<rect x="675.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="690.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="690.9" y="234.0" text-anchor="middle" class="tick">18:00</text>
-<rect x="710.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="725.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="725.6" y="234.0" text-anchor="middle" class="tick">19:00</text>
-<rect x="745.0" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="760.4" y="216.0" text-anchor="middle" class="tick">0</text><text x="760.4" y="234.0" text-anchor="middle" class="tick">20:00</text>
-<rect x="779.8" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="795.1" y="216.0" text-anchor="middle" class="tick">0</text><text x="795.1" y="234.0" text-anchor="middle" class="tick">21:00</text>
-<rect x="814.5" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="829.9" y="216.0" text-anchor="middle" class="tick">0</text><text x="829.9" y="234.0" text-anchor="middle" class="tick">22:00</text>
-<rect x="849.2" y="220.0" width="30.8" height="0.0" fill="#56ccf2" rx="2"/><text x="864.6" y="216.0" text-anchor="middle" class="tick">0</text><text x="864.6" y="234.0" text-anchor="middle" class="tick">23:00</text>
-</svg>
-</div>
+```text
+00:00 ████░░░░░░░░░░░ 22
+01:00 ████████░░░░░░░ 46
+02:00 ████████░░░░░░░ 46
+03:00 ███████████░░░░ 70
+04:00 ███████░░░░░░░░ 43
+05:00 ████████████░░░ 75
+06:00 ███████████████ 92
+07:00 ██████████░░░░░ 62
+08:00 ██████████░░░░░ 64
+09:00 █████████░░░░░░ 56
+10:00 ███████████░░░░ 66
+11:00 ███████████░░░░ 66
+12:00 ██████████░░░░░ 60
+13:00 ██████████░░░░░ 64
+14:00 ███████████░░░░ 69
+15:00 ████████░░░░░░░ 52
+16:00 █████████░░░░░░ 54
+17:00 ███████░░░░░░░░ 44
+18:00 ███░░░░░░░░░░░░ 16
+19:00 ███░░░░░░░░░░░░ 17
+20:00 █░░░░░░░░░░░░░░ 7
+21:00 █░░░░░░░░░░░░░░ 7
+22:00 █░░░░░░░░░░░░░░ 6
+23:00 ██░░░░░░░░░░░░░ 14
+```
 
 ---
 *由 GitHub Actions 每日自动更新 · 使用 `gh api` 拉取原始数据 · 数据已匿名化*
