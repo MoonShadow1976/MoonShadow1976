@@ -20,6 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -34,7 +35,7 @@ jobs:
       - name: Generate Contribution Report
         env:
           GH_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
-        run: python scripts/contribution_report.py
+        run: python -u scripts/contribution_report.py
 
       - name: Commit & Push Report
         run: |

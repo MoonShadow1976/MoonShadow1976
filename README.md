@@ -49,6 +49,8 @@
   </tr>
 </table>
 
+> 📅 以上图表（3D 贡献图 & 桑基图）统计数据均基于**最近一年**的提交记录
+
 <table align="center" width="100%">
   <tr>
     <td align="center">

@@ -70,9 +70,10 @@ def color_for_lang(name: str, fallback_idx: int = 0) -> str:
 # ---------------------------------------------------------------------------
 # GitHub API helpers
 # ---------------------------------------------------------------------------
-def gh(path: str) -> list:
+def gh(path: str, timeout: int = 120) -> list:
+    """带分页、带超时的 gh api 调用。适用于数组型分页接口（/repos、/languages 列表等）。"""
     cmd = ["gh", "api", "--paginate", path, "--jq", "if type == \"array\" then . else [.] end"]
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or f"gh api failed (exit {proc.returncode})")
     results = []
@@ -88,18 +89,28 @@ def gh(path: str) -> list:
     return results
 
 
-def gh_json(path: str):
+def gh_json(path: str, timeout: int = 60):
     cmd = ["gh", "api", path, "--jq", "."]
-    proc = subprocess.run(cmd, capture_output=True, text=True)
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     if proc.returncode != 0:
         raise RuntimeError(proc.stderr.strip() or f"gh api failed (exit {proc.returncode})")
     return json.loads(proc.stdout.strip() or "null")
 
 
+def gh_page(path: str, timeout: int = 60) -> list:
+    """单页 gh api 调用，不带 --paginate。返回当页结果。"""
+    cmd = ["gh", "api", path, "--jq", "if type == \"array\" then . else [.] end"]
+    proc = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or f"gh api failed (exit {proc.returncode})")
+    data = json.loads(proc.stdout.strip() or "[]")
+    return data if isinstance(data, list) else ([] if data is None else [data])
+
+
 def _fetch_repos() -> list:
     try:
-        return [r for r in gh(f"/users/{USERNAME}/repos?type=all&per_page=100") if isinstance(r, dict)]
-    except RuntimeError as e:
+        return [r for r in gh(f"/users/{USERNAME}/repos?type=all&per_page=100&sort=updated") if isinstance(r, dict)]
+    except (RuntimeError, subprocess.TimeoutExpired) as e:
         print(f"  ⚠ 获取仓库列表失败: {e}")
         return []
 
@@ -109,7 +120,7 @@ def _fetch_languages(repo: str) -> dict:
         try:
             data = gh_json(f"/repos/{USERNAME}/{repo}/languages")
             return data if isinstance(data, dict) else {}
-        except (RuntimeError, json.JSONDecodeError):
+        except (RuntimeError, json.JSONDecodeError, subprocess.TimeoutExpired):
             if attempt < 2:
                 time.sleep(1 + attempt)
                 continue
@@ -118,33 +129,55 @@ def _fetch_languages(repo: str) -> dict:
 
 
 def _fetch_commit_dates(repo: str, since: str) -> list:
+    """手动分页获取仓库提交日期，一旦遇到 since 之前的日期立即停止，避免拉取历史全部提交。
+
+    GitHub /commits 返回是按最新→最旧排序，所以碰到 since 之前的日期即可 break。
+    同时 URL 里直接带上 since=，服务端先过滤，减少不必要的数据量。
+    """
     dates = []
-    try:
-        data = gh(f"/repos/{USERNAME}/{repo}/commits?author={USERNAME}&per_page=100")
-    except (RuntimeError, json.JSONDecodeError) as e:
-        msg = str(e)
-        if "Git Repository is empty" not in msg:
-            print(f"  ⚠ 跳过 {repo}: {msg[:100]}")
-        return []
-    for c in data:
-        if not isinstance(c, dict) or len(dates) >= MAX_COMMITS_PER_REPO:
+    page = 1
+    while len(dates) < MAX_COMMITS_PER_REPO:
+        path = (f"/repos/{USERNAME}/{repo}/commits"
+                f"?author={USERNAME}&since={since}T00:00:00Z&per_page={PER_PAGE}&page={page}")
+        try:
+            data = gh_page(path, timeout=45)
+        except (RuntimeError, json.JSONDecodeError, subprocess.TimeoutExpired) as e:
+            msg = str(e)
+            if "Git Repository is empty" not in msg and "Not Found" not in msg:
+                print(f"  ⚠ 跳过 {repo} commits (page {page}): {msg[:100]}")
             break
-        commit = c.get("commit") or {}
-        author = commit.get("author") or {}
-        ds = (author.get("date") or "")[:10]
-        if ds:
+        if not data:
+            break
+        stop = False
+        for c in data:
+            if not isinstance(c, dict) or len(dates) >= MAX_COMMITS_PER_REPO:
+                stop = True
+                break
+            commit = c.get("commit") or {}
+            author = commit.get("author") or {}
+            ds = (author.get("date") or "")[:10]
+            if not ds:
+                continue
             if ds < since:
+                stop = True
                 break
             dates.append(ds)
+        # 不满一页 = 已经是最后一页
+        if stop or len(data) < PER_PAGE:
+            break
+        page += 1
     return dates
 
 
 def _fetch_search_count(query: str) -> int:
-    try:
-        data = gh_json(f"/search/issues?q={query}")
-        return int(data.get("total_count", 0))
-    except Exception:
-        return 0
+    for attempt in range(2):
+        try:
+            data = gh_json(f"/search/issues?q={query}", timeout=30)
+            return int(data.get("total_count", 0))
+        except Exception:
+            if attempt < 1:
+                time.sleep(2)
+    return 0
 
 
 # ---------------------------------------------------------------------------
@@ -169,6 +202,7 @@ def get_all_data(demo: bool = False) -> dict:
 
     for i, r in enumerate(repos):
         name = r.get("name", "")
+        t0 = time.time()
         langs = _fetch_languages(name)
         if langs:
             repo_languages[name] = langs
@@ -180,15 +214,17 @@ def get_all_data(demo: bool = False) -> dict:
         if dates:
             repo_commit_dates[name] = dates
 
-        if (i + 1) % 10 == 0:
-            print(f"    进度 {i + 1}/{len(repos)}")
+        elapsed = time.time() - t0
+        print(f"  [{i + 1}/{len(repos)}] {name}: {len(dates):>4} commits, {len(langs)} langs ({elapsed:.1f}s)",
+              flush=True)
 
+    print("  🔍 Issue/PR 统计中...", flush=True)
     issue_count = _fetch_search_count(f"is:issue author:{USERNAME}")
     pr_count = _fetch_search_count(f"is:pr author:{USERNAME}")
-    print(f"  Issue={issue_count}, PR={pr_count}")
+    print(f"  Issue={issue_count}, PR={pr_count}", flush=True)
 
     total_commits = sum(len(v) for v in repo_commit_dates.values())
-    print(f"  提交总数(近一年): {total_commits}")
+    print(f"  提交总数(近一年): {total_commits}", flush=True)
 
     return {
         "username": USERNAME,

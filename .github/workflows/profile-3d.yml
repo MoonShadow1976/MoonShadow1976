@@ -20,6 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:
@@ -63,7 +64,7 @@ jobs:
       - name: Generate fork-included cards
         env:
           GH_TOKEN: ${{ secrets.MY_PAT || secrets.GITHUB_TOKEN }}
-        run: python scripts/generate_with_fork_cards.py
+        run: python -u scripts/generate_with_fork_cards.py
 
       # ---- 提交所有生成的卡片 ----
       - name: Commit & Push
