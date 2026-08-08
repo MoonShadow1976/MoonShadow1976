@@ -342,12 +342,12 @@ LEFT_TX = "skewY(30) scale(0.56 0.65)"
 RIGHT_TX_OFFSET_X, RIGHT_TX_OFFSET_Y = 18, 10.39
 RIGHT_TX = f"translate({RIGHT_TX_OFFSET_X} {RIGHT_TX_OFFSET_Y}) skewY(-30) scale(0.56 0.65)"
 
-# 等距网格步进（水平镜像：最新周在左前，周六在左前）：
-#   列主方向：下一 col → x-20, y+11.547（向左下 = 前左）
-#   行主方向：下一 row → x+20, y+11.547（向右下 = 前右）
+# 等距网格步进（从参考 SVG 实测）：
+#   列主方向：下一 col → x+20, y+11.547（向右下 = 前右，col 越大越新）
+#   行主方向：下一 row → x-20, y+11.547（向左下 = 前左，row 越大越靠下=越靠近周六）
 # 两个方向 y 偏移相同（都是 20*tan(30°)），x 偏移等幅反向
-GRID_COL_DX, GRID_COL_DY = -20.0, 20.0 * math.tan(math.radians(30))  # -20, 11.547
-GRID_ROW_DX, GRID_ROW_DY = 20.0, 20.0 * math.tan(math.radians(30))  # 20, 11.547
+GRID_COL_DX, GRID_COL_DY = 20.0, 20.0 * math.tan(math.radians(30))  # 20, 11.547
+GRID_ROW_DX, GRID_ROW_DY = -20.0, 20.0 * math.tan(math.radians(30))  # -20, 11.547
 
 # 雷达图维度
 RADAR_DIMS = ["Commit", "Issue", "PullReq", "Review", "Repo"]
@@ -427,10 +427,10 @@ def render_gitblock(cells: list, months: list, theme: dict,
     cols, rows = len(cells), len(cells[0])  # 53, 7
 
     # ===== 1. 计算网格在画布上的放置（与参考 SVG 对齐）=====
-    # x 范围：col 方向 -1040 到 row 方向 +120 → 跨度 1160
+    # x 范围：row 方向 -120 到 col 方向 +1040 → 跨度 1160
     # y 范围：0 到 (cols-1+rows-1)*11.547 ≈ 669.7
     # 目标：左缘 ~20，右缘 ~1180，底缘 ~820
-    grid_origin_x = 1060  # 镜像后右移，使最新周(col=52)在左、最旧周(col=0)在右
+    grid_origin_x = 140
     grid_origin_y = 150
 
     levels = theme["levels"]  # [(top_hsl, left_rgb, right_rgb), ...]
@@ -467,7 +467,7 @@ def render_gitblock(cells: list, months: list, theme: dict,
     all_cells = []
     for col in range(cols):
         for row in range(rows):
-            lvl = cells[col][6 - row]  # 翻转天序：周六(row=6)渲染在最左，周日(row=0)在最右
+            lvl = cells[col][row]
             all_cells.append((col, row, lvl))
 
     all_cells.sort(key=lambda c: (c[0] + c[1], c[2], c[1]))
@@ -477,11 +477,13 @@ def render_gitblock(cells: list, months: list, theme: dict,
         side_h = LEVEL_SIDE_HEIGHT[lvl]
         gx, gy = cell_translate(col, row)
 
-        # 单元底面 4 顶点（菱形），B/C 交换以保持光照方向一致：
-        # B = row 方向 (右下)，C = col 方向 (左下)
+        # 单元底面 4 顶点（菱形）：
+        # col 方向 (20, 11.547)  右下  —  B
+        # row 方向 (-20, 11.547) 左下  —  C
+        # 综合：A(后上) B(右下) C(左下) D(前下)
         A = (gx, gy)
-        B = (gx + GRID_ROW_DX, gy + GRID_ROW_DY)
-        C = (gx + GRID_COL_DX, gy + GRID_COL_DY)
+        B = (gx + GRID_COL_DX, gy + GRID_COL_DY)
+        C = (gx + GRID_ROW_DX, gy + GRID_ROW_DY)
         D = (gx + GRID_COL_DX + GRID_ROW_DX, gy + GRID_COL_DY + GRID_ROW_DY)
 
         # 顶面 = 底面整体向上平移 side_h（screen y 减小）
