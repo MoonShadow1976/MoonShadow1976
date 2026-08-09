@@ -370,18 +370,35 @@ def build_grid(commit_counts: Counter):
     positive = sorted(c for c in commit_counts.values() if c > 0)
     n = len(positive)
 
+    # 按 25/50/75 百分位位置取实际值作为 cutoff（按天大致四等份，相同 count 必同档）
+    if n == 0:
+        q1 = q2 = q3 = 1
+    else:
+        q1 = positive[min(n - 1, int(0.25 * n))]
+        q2 = positive[min(n - 1, int(0.50 * n))]
+        q3 = positive[min(n - 1, int(0.75 * n))]
+    # 若 cutoff 有重复导致空档位，则按 distinct 值拉开一档
+    uniq = sorted(set(positive))
+    if n >= 4 and len(uniq) > 1:
+        # 保证 cutoff 严格单调不下降；若相邻 cutoff 相等则尝试用下一个 distinct 值
+        def next_greater_than(v, base):
+            for u in uniq:
+                if u > v and u >= base:
+                    return u
+            return max(v, base)
+        if q2 <= q1:
+            q2 = next_greater_than(q1, q1)
+        if q3 <= q2:
+            q3 = next_greater_than(q2, q2)
+
     def level_of(c: int) -> int:
         if c <= 0:
             return 0
-        if n == 0:
+        if c <= q1:
             return 1
-        rank = sum(1 for v in positive if v <= c)
-        q = rank / n
-        if q <= 0.25:
-            return 1
-        if q <= 0.50:
+        if c <= q2:
             return 2
-        if q <= 0.75:
+        if c <= q3:
             return 3
         return 4
 
@@ -542,17 +559,17 @@ def render_gitblock(cells: list, count_grid: list, months: list, theme: dict,
         lines.append(
             f'<polygon points="{Cb[0]:.2f},{Cb[1]:.2f} {Db[0]:.2f},{Db[1]:.2f} '
             f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-            f'fill="{left_c}"/>')
+            f'fill="{left_c}" stroke="{grid_line}" stroke-width="0.4"/>')
         # 右侧面（右下前侧）：Bb → Db → Dt → Bt
         lines.append(
             f'<polygon points="{Bb[0]:.2f},{Bb[1]:.2f} {Db[0]:.2f},{Db[1]:.2f} '
             f'{Dt[0]:.2f},{Dt[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f}" '
-            f'fill="{right_c}"/>')
+            f'fill="{right_c}" stroke="{grid_line}" stroke-width="0.4"/>')
         # 顶面（菱形）盖在当前块顶部，盖住左右侧面顶端缝
         lines.append(
             f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
             f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-            f'fill="{top_c}"/>')
+            f'fill="{top_c}" stroke="{grid_line}" stroke-width="0.6"/>')
 
     # ===== 4. 雷达图（右上：transform="translate(980, 284.5)"）=====
     radar_cx, radar_cy = 980, 284.5
