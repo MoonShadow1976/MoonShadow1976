@@ -530,7 +530,6 @@ def render_gitblock(cells: list, count_grid: list, months: list, theme: dict,
         # bi=n_blk-1 (顶层)：底面在 (n_blk-1)*bh，顶面在 n_blk*bh = th
         bot_offset = bi * bh
         top_offset = (bi + 1) * bh
-        Ab = (A[0], A[1] - bot_offset)
         Bb = (B[0], B[1] - bot_offset)
         Cb = (C[0], C[1] - bot_offset)
         Db = (D[0], D[1] - bot_offset)

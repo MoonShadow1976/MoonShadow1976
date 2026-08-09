@@ -78,13 +78,13 @@ def generate_fork_cards(data: dict) -> None:
 
     # ---- 3D 贡献图 ----
     if total_commits > 0:
-        cells, months, d_start, d_end = build_grid(counts)
+        cells, count_grid, months, d_start, d_end = build_grid(counts)
         for fname, theme in (
             ("profile-gitblock-with-forks.svg", GITBLOCK_THEME),
             ("profile-night-green-with-forks.svg", NIGHT_GREEN_THEME),
         ):
             svg = render_gitblock(
-                cells, months, theme, d_start, d_end, stats, lang_items
+                cells, count_grid, months, theme, d_start, d_end, stats, lang_items
             )
             write_file(THREED_DIR / fname, svg)
     else:
