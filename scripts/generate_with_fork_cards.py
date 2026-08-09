@@ -355,10 +355,13 @@ RADAR_MAX_LOG = 4  # 对数刻度：0=1, 1=10, 2=100, 3=1K, 4=10K
 
 
 def build_grid(commit_counts: Counter):
-    """把提交计数映射为 53 周 × 7 天 的 0-4 级别网格，返回 (cells, months)。
+    """把提交计数映射为 53 周 × 7 天 的网格。返回 (levels, counts, months, date_start, date_end)。
 
-    cells: list[col][row] → level(0-4)，行首为周日，与 GitHub 贡献图一致。
+    levels: list[col][row] → 0-4 的颜色等级（quartile）
+    counts: list[col][row] → 当天的实际贡献数（用于高度计算）
     months: [(列索引, "Jan")] 用于顶部月份标签。
+
+    颜色等级规则：相对四分位数（1=FIRST绿, 2=SECOND黄, 3=THIRD蓝, 4=FOURTH红）
     """
     today = date.today()
     end_week = today - timedelta(days=today.isoweekday() % 7)
@@ -382,12 +385,15 @@ def build_grid(commit_counts: Counter):
             return 3
         return 4
 
-    cells = [[0] * 7 for _ in range(cols)]
+    levels = [[0] * 7 for _ in range(cols)]
+    counts = [[0] * 7 for _ in range(cols)]
     for col in range(cols):
         week_start = start + timedelta(days=col * 7)
         for row in range(7):
             d = week_start + timedelta(days=row)
-            cells[col][row] = level_of(commit_counts.get(d.isoformat(), 0))
+            c = commit_counts.get(d.isoformat(), 0)
+            levels[col][row] = level_of(c)
+            counts[col][row] = c
 
     months = []
     prev = None
@@ -397,7 +403,7 @@ def build_grid(commit_counts: Counter):
             if prev is not None:
                 months.append((col, MONTHS[d.month - 1]))
             prev = d.month
-    return cells, months, start.isoformat()[:10], date.today().isoformat()
+    return levels, counts, months, start.isoformat()[:10], date.today().isoformat()
 
 
 def _radar_point(radius_ratio: float, idx: int) -> tuple:
@@ -410,15 +416,20 @@ def _radar_point(radius_ratio: float, idx: int) -> tuple:
     return radius_ratio * math.cos(angle), radius_ratio * math.sin(angle)
 
 
-def render_gitblock(cells: list, months: list, theme: dict,
+def render_gitblock(cells: list, count_grid: list, months: list, theme: dict,
                     date_start: str, date_end: str, stats: dict,
                     mini_donut_items: list) -> str:
     """渲染 3D 贡献图 SVG，尽量逼近 yoshi389111/github-profile-3d-contrib。
 
+    cells: list[col][row] → 0-4 颜色等级（相对 quartile 决定色块颜色）
+    count_grid: list[col][row] → 当天实际贡献数（决定总高度 + 积木层数）
     stats 字典键：
       total_commits, repo_count, issue_count, pr_count, review_count,
       star_count (总星标), fork_count
     mini_donut_items: 与 render_lang_card 相同格式 [(name, color, pct), ...]，取前 2-3 个
+
+    高度规则：total_h = log10(count/20 + 1) * 144 + 3
+    积木堆叠：每 4 个贡献为 1 层积木，自底向上绘制（层数 = ceil(count/4)，count=0 时 0 层）
     """
     W, H = 1280, 850  # 与 yoshi389111 画布同尺寸
     bg, fg, fg_strong, weak = (theme["bg"], theme["fg"],
@@ -458,66 +469,91 @@ def render_gitblock(cells: list, months: list, theme: dict,
         gy = grid_origin_y + col * GRID_COL_DY + row * GRID_ROW_DY
         return gx, gy
 
-    # 预计算所有单元格的顶点坐标，再按 level 绘制（相同 level 可以批量绘制以减少标签数）
-    # 单元底面 4 顶点（菱形）：A(顶), B(右), C(左), D(底)
+    # 单元底面 4 顶点（菱形）：A(后上) B(右下/col方向) C(左下/row方向) D(前下)
     # col 方向向量 (20, 11.547)；row 方向向量 (-20, 11.547)
 
-    # 收集所有单元格到统一列表，按 (col+row, level) 排序后一次性绘制
-    # 排序规则：col+row 小的（远/后）先画，同深度下 level 小的（矮）先画
-    # 这样后方的矮块不会被前方的矮块错误遮挡，后方的高块也不会覆盖前方矮块
-    all_cells = []
+    # 高度公式（与 yoshi389111 对齐）：log10(count/20 + 1) * 144 + 3
+    def total_height(cnt: int) -> float:
+        if cnt <= 0:
+            return 0.0
+        return math.log10(cnt / 20.0 + 1.0) * 144.0 + 3.0
+
+    # 收集所有"积木层"到统一列表，按 (col+row, 层索引) 升序绘制：
+    #   col+row 小（远/后）先画；同深度下层号小（底层）先画 → painter's algorithm
+    # 每层数据：(col, row, layer_idx, n_layers, total_h, block_h, lvl)
+    #   layer_idx: 0 = 最底层（底面），n_layers-1 = 最顶层（尖顶）
+    all_layers = []
     for col in range(cols):
         for row in range(rows):
+            cnt = count_grid[col][row]
             lvl = cells[col][row]
-            all_cells.append((col, row, lvl))
+            if cnt <= 0 or lvl == 0:
+                continue  # 只有底面，不画积木层
+            th = total_height(cnt)
+            # 基础：每 4 contributions 为一层积木；再用"单层不低于 4px"和"上限 8 层"裁剪
+            n_blocks = math.ceil(cnt / 4.0)
+            n_blocks = min(n_blocks, 8)                # 最多 8 层，避免高贡献日 SVG 爆炸
+            n_blocks = min(n_blocks, max(1, int(math.ceil(th / 4.0))))  # 单层不低于 4px
+            if th < 4:
+                n_blocks = 1
+            bh = th / n_blocks
+            for bi in range(n_blocks):
+                all_layers.append((col, row, bi, n_blocks, th, bh, lvl))
 
-    all_cells.sort(key=lambda c: (c[0] + c[1], c[2], c[1]))
+    # 先一次性画完所有 lvl==0 的灰底（最底层，后画会覆盖立柱底部）
+    for col in range(cols):
+        for row in range(rows):
+            gx, gy = cell_translate(col, row)
+            A = (gx, gy)
+            B = (gx + GRID_COL_DX, gy + GRID_COL_DY)
+            C = (gx + GRID_ROW_DX, gy + GRID_ROW_DY)
+            D = (gx + GRID_COL_DX + GRID_ROW_DX, gy + GRID_COL_DY + GRID_ROW_DY)
+            top_c = levels[0][0]
+            lines.append(
+                f'<polygon points="{A[0]:.2f},{A[1]:.2f} {B[0]:.2f},{B[1]:.2f} '
+                f'{D[0]:.2f},{D[1]:.2f} {C[0]:.2f},{C[1]:.2f}" '
+                f'fill="{top_c}" stroke="{grid_line}" stroke-width="0.6"/>')
 
-    for col, row, lvl in all_cells:
+    # 按 painter's algorithm 排序：深度(col+row)升序 → 层索引升序（底层先画 → 顶层后画）
+    all_layers.sort(key=lambda L: (L[0] + L[1], L[2]))
+
+    for col, row, bi, n_blk, th, bh, lvl in all_layers:
         top_c, left_c, right_c = levels[lvl]
-        side_h = LEVEL_SIDE_HEIGHT[lvl]
         gx, gy = cell_translate(col, row)
-
-        # 单元底面 4 顶点（菱形）：
-        # col 方向 (20, 11.547)  右下  —  B
-        # row 方向 (-20, 11.547) 左下  —  C
-        # 综合：A(后上) B(右下) C(左下) D(前下)
         A = (gx, gy)
         B = (gx + GRID_COL_DX, gy + GRID_COL_DY)
         C = (gx + GRID_ROW_DX, gy + GRID_ROW_DY)
         D = (gx + GRID_COL_DX + GRID_ROW_DX, gy + GRID_COL_DY + GRID_ROW_DY)
 
-        # 顶面 = 底面整体向上平移 side_h（screen y 减小）
-        side_h_visual = side_h
-        At = (A[0], A[1] - side_h_visual)
-        Bt = (B[0], B[1] - side_h_visual)
-        Ct = (C[0], C[1] - side_h_visual)
-        Dt = (D[0], D[1] - side_h_visual)
+        # 当前积木块的顶/底 y 偏移（screen 向上 y 减小）
+        # bi=0 (最底层)：底面在底平面（offset=0），顶面在 bh 高度
+        # bi=n_blk-1 (顶层)：底面在 (n_blk-1)*bh，顶面在 n_blk*bh = th
+        bot_offset = bi * bh
+        top_offset = (bi + 1) * bh
+        Ab = (A[0], A[1] - bot_offset)
+        Bb = (B[0], B[1] - bot_offset)
+        Cb = (C[0], C[1] - bot_offset)
+        Db = (D[0], D[1] - bot_offset)
+        At = (A[0], A[1] - top_offset)
+        Bt = (B[0], B[1] - top_offset)
+        Ct = (C[0], C[1] - top_offset)
+        Dt = (D[0], D[1] - top_offset)
 
-        if lvl == 0:
-            # level 0 side_h=0，顶面=底面，平铺不凸起，边缘与相邻方块底边对齐
-            lines.append(
-                f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
-                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-                f'fill="{top_c}" stroke="{grid_line}" stroke-width="0.6"/>')
-        else:
-            # 左侧面（左下前侧）：C → D → Dt → Ct
-            lines.append(
-                f'<polygon points="{C[0]:.2f},{C[1]:.2f} {D[0]:.2f},{D[1]:.2f} '
-                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-                f'fill="{left_c}"/>')
-
-            # 右侧面（右下前侧）：B → D → Dt → Bt
-            lines.append(
-                f'<polygon points="{B[0]:.2f},{B[1]:.2f} {D[0]:.2f},{D[1]:.2f} '
-                f'{Dt[0]:.2f},{Dt[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f}" '
-                f'fill="{right_c}"/>')
-
-            # 顶面（菱形）最后画，盖住侧面顶端
-            lines.append(
-                f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
-                f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
-                f'fill="{top_c}"/>')
+        # 左侧面（左下前侧）：Cb → Db → Dt → Ct
+        lines.append(
+            f'<polygon points="{Cb[0]:.2f},{Cb[1]:.2f} {Db[0]:.2f},{Db[1]:.2f} '
+            f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
+            f'fill="{left_c}"/>')
+        # 右侧面（右下前侧）：Bb → Db → Dt → Bt
+        lines.append(
+            f'<polygon points="{Bb[0]:.2f},{Bb[1]:.2f} {Db[0]:.2f},{Db[1]:.2f} '
+            f'{Dt[0]:.2f},{Dt[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f}" '
+            f'fill="{right_c}"/>')
+        # 顶面（菱形）盖在当前块顶部，盖住左右侧面顶端缝
+        lines.append(
+            f'<polygon points="{At[0]:.2f},{At[1]:.2f} {Bt[0]:.2f},{Bt[1]:.2f} '
+            f'{Dt[0]:.2f},{Dt[1]:.2f} {Ct[0]:.2f},{Ct[1]:.2f}" '
+            f'fill="{top_c}"/>')
 
     # ===== 4. 雷达图（右上：transform="translate(980, 284.5)"）=====
     radar_cx, radar_cy = 980, 284.5
@@ -668,13 +704,13 @@ GITBLOCK_THEME = {
     "levels": [
         # level 0 灰底（无提交）
         ("#f8f8f8", "rgb(207, 207, 207)", "rgb(174, 174, 174)"),
-        # level 1 绿（低）
+        # level 1 FIRST_QUARTILE 绿（≤25%）
         ("hsl(140, 70%, 45%)", "rgb(40, 167, 69)", "rgb(34, 141, 58)"),
-        # level 2 蓝（中低）
+        # level 2 SECOND_QUARTILE 蓝（25%-50%）
         ("hsl(210, 88%, 52%)", "rgb(26, 131, 220)", "rgb(22, 109, 183)"),
-        # level 3 黄（中高）
+        # level 3 THIRD_QUARTILE 黄（50%-75%）
         ("hsl(48, 100%, 54%)", "rgb(230, 177, 0)", "rgb(192, 148, 0)"),
-        # level 4 红（高）
+        # level 4 FOURTH_QUARTILE 红（≥75%）
         ("hsl(4, 90%, 56%)",  "rgb(229, 56, 59)",  "rgb(192, 47, 50)"),
     ],
 }
@@ -813,10 +849,10 @@ def main() -> None:
 
     # ---- 3D 贡献图 ----
     if total_commits > 0:
-        cells, months, d_start, d_end = build_grid(counts)
+        cells, count_grid, months, d_start, d_end = build_grid(counts)
         for fname, theme in (("profile-gitblock-with-forks.svg", GITBLOCK_THEME),
                              ("profile-night-green-with-forks.svg", NIGHT_GREEN_THEME)):
-            svg = render_gitblock(cells, months, theme,
+            svg = render_gitblock(cells, count_grid, months, theme,
                                   d_start, d_end, stats, lang_items)
             write_file(THREED_DIR / fname, svg)
     else:
