@@ -127,13 +127,15 @@ def _fetch_languages(repo: str) -> dict:
     return {}
 
 
-def _fetch_commit_dates(repo: str, since: str) -> list:
+def _fetch_commit_dates(repo: str, since: str) -> tuple:
     """手动分页获取仓库提交日期，一旦遇到 since 之前的日期立即停止，避免拉取历史全部提交。
 
     GitHub /commits 返回是按最新→最旧排序，所以碰到 since 之前的日期即可 break。
     同时 URL 里直接带上 since=，服务端先过滤，减少不必要的数据量。
+    返回 (dates_list, skipped_merge_count)。
     """
     dates = []
+    skipped_merge = 0
     page = 1
     while len(dates) < MAX_COMMITS_PER_REPO:
         path = (f"/repos/{USERNAME}/{repo}/commits"
@@ -155,6 +157,7 @@ def _fetch_commit_dates(repo: str, since: str) -> list:
             # 剔除 merge commit（有 2 个及以上 parents 的是 merge）
             parents = c.get("parents")
             if isinstance(parents, list) and len(parents) > 1:
+                skipped_merge += 1
                 continue
             commit = c.get("commit") or {}
             author = commit.get("author") or {}
@@ -169,7 +172,7 @@ def _fetch_commit_dates(repo: str, since: str) -> list:
         if stop or len(data) < PER_PAGE:
             break
         page += 1
-    return dates
+    return dates, skipped_merge
 
 
 def _fetch_search_count(query: str) -> int:
@@ -213,12 +216,13 @@ def get_all_data(demo: bool = False) -> dict:
                 lang_bytes[lang] += size
                 lang_repo_bytes[(lang, name)] = size
 
-        dates = _fetch_commit_dates(name, since)
+        dates, skipped_merge = _fetch_commit_dates(name, since)
         if dates:
             repo_commit_dates[name] = dates
 
         elapsed = time.time() - t0
-        print(f"  [{i + 1}/{len(repos)}] {name}: {len(dates):>4} commits, {len(langs)} langs ({elapsed:.1f}s)",
+        merge_info = f", skip {skipped_merge} merge" if skipped_merge else ""
+        print(f"  [{i + 1}/{len(repos)}] {name}: {len(dates):>4} commits, {len(langs)} langs{merge_info} ({elapsed:.1f}s)",
               flush=True)
 
     print("  🔍 Issue/PR 统计中...", flush=True)

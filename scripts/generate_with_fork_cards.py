@@ -361,44 +361,23 @@ def build_grid(commit_counts: Counter):
     counts: list[col][row] → 当天的实际贡献数（用于高度计算）
     months: [(列索引, "Jan")] 用于顶部月份标签。
 
-    颜色等级规则：相对四分位数（1=FIRST绿, 2=SECOND黄, 3=THIRD蓝, 4=FOURTH红）
+    颜色等级规则：按贡献数绝对阈值（1=≤4绿, 2=≤8蓝, 3=≤12黄, 4=>12红）
     """
     today = date.today()
     end_week = today - timedelta(days=today.isoweekday() % 7)
     start = end_week - timedelta(weeks=52)  # 52 周前周日，共 53 列（含当前周）
     cols = 53
-    positive = sorted(c for c in commit_counts.values() if c > 0)
-    n = len(positive)
 
-    # 按 25/50/75 百分位位置取实际值作为 cutoff（按天大致四等份，相同 count 必同档）
-    if n == 0:
-        q1 = q2 = q3 = 1
-    else:
-        q1 = positive[min(n - 1, int(0.25 * n))]
-        q2 = positive[min(n - 1, int(0.50 * n))]
-        q3 = positive[min(n - 1, int(0.75 * n))]
-    # 若 cutoff 有重复导致空档位，则按 distinct 值拉开一档
-    uniq = sorted(set(positive))
-    if n >= 4 and len(uniq) > 1:
-        # 保证 cutoff 严格单调不下降；若相邻 cutoff 相等则尝试用下一个 distinct 值
-        def next_greater_than(v, base):
-            for u in uniq:
-                if u > v and u >= base:
-                    return u
-            return max(v, base)
-        if q2 <= q1:
-            q2 = next_greater_than(q1, q1)
-        if q3 <= q2:
-            q3 = next_greater_than(q2, q2)
-
+    # 颜色等级：按 contributions 绝对数量分档
+    #   1 绿: ≤4   2 蓝: ≤8   3 黄: ≤12   4 红: >12
     def level_of(c: int) -> int:
         if c <= 0:
             return 0
-        if c <= q1:
+        if c <= 4:
             return 1
-        if c <= q2:
+        if c <= 8:
             return 2
-        if c <= q3:
+        if c <= 12:
             return 3
         return 4
 

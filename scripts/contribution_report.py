@@ -129,6 +129,10 @@ def fetch_commit_dates(repo: str, since: str) -> list:
     for c in data:
         if not isinstance(c, dict) or len(dates) >= MAX_COMMITS_PER_REPO:
             break
+        # 剔除 merge commit（有 2 个及以上 parents）
+        parents = c.get("parents")
+        if isinstance(parents, list) and len(parents) > 1:
+            continue
         commit = c.get("commit") or {}
         author = commit.get("author") or {}
         ds = (author.get("date") or "")[:10]
