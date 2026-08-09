@@ -128,16 +128,18 @@ def _fetch_languages(repo: str) -> dict:
 
 
 def _fetch_commit_dates(repo: str, since: str) -> tuple:
-    """手动分页获取仓库提交日期，一旦遇到 since 之前的日期立即停止，避免拉取历史全部提交。
+    """手动分页获取仓库提交日期，返回两组数据：含 merge + 不含 merge + merge 跳过计数。
 
-    GitHub /commits 返回是按最新→最旧排序，所以碰到 since 之前的日期即可 break。
-    同时 URL 里直接带上 since=，服务端先过滤，减少不必要的数据量。
-    返回 (dates_list, skipped_merge_count)。
+    GitHub /commits 返回是按最新→最旧排序，碰到 since 之前的日期即可 break。
+    返回 (dates_with_merge, dates_no_merge, merge_count)。
+    dates_with_merge：给 3D 贡献图/饼图用（contributions 全算，merge 也算）
+    dates_no_merge ：给桑基图用（只看真实代码贡献，剔除 merge）
+    merge_count    ：日志显示用
     """
-    dates = []
-    skipped_merge = 0
+    dates_with_merge = []
+    dates_no_merge = []
     page = 1
-    while len(dates) < MAX_COMMITS_PER_REPO:
+    while len(dates_with_merge) < MAX_COMMITS_PER_REPO:
         path = (f"/repos/{USERNAME}/{repo}/commits"
                 f"?author={USERNAME}&since={since}T00:00:00Z&per_page={PER_PAGE}&page={page}")
         try:
@@ -151,14 +153,9 @@ def _fetch_commit_dates(repo: str, since: str) -> tuple:
             break
         stop = False
         for c in data:
-            if not isinstance(c, dict) or len(dates) >= MAX_COMMITS_PER_REPO:
+            if not isinstance(c, dict) or len(dates_with_merge) >= MAX_COMMITS_PER_REPO:
                 stop = True
                 break
-            # 剔除 merge commit（有 2 个及以上 parents 的是 merge）
-            parents = c.get("parents")
-            if isinstance(parents, list) and len(parents) > 1:
-                skipped_merge += 1
-                continue
             commit = c.get("commit") or {}
             author = commit.get("author") or {}
             ds = (author.get("date") or "")[:10]
@@ -167,12 +164,17 @@ def _fetch_commit_dates(repo: str, since: str) -> tuple:
             if ds < since:
                 stop = True
                 break
-            dates.append(ds)
+            dates_with_merge.append(ds)
+            # 有 2 个及以上 parents 的是 merge commit，桑基图不计入
+            parents = c.get("parents")
+            if not (isinstance(parents, list) and len(parents) > 1):
+                dates_no_merge.append(ds)
         # 不满一页 = 已经是最后一页
         if stop or len(data) < PER_PAGE:
             break
         page += 1
-    return dates, skipped_merge
+    merge_count = len(dates_with_merge) - len(dates_no_merge)
+    return dates_with_merge, dates_no_merge, merge_count
 
 
 def _fetch_search_count(query: str) -> int:
@@ -204,7 +206,8 @@ def get_all_data(demo: bool = False) -> dict:
     lang_bytes = Counter()
     repo_languages = {}
     lang_repo_bytes = {}
-    repo_commit_dates = {}
+    repo_commit_dates = {}          # 含 merge（3D 贡献图 / 饼图用，contributions 全算）
+    repo_commit_dates_no_merge = {} # 不含 merge（桑基图用，只看真实代码贡献）
 
     for i, r in enumerate(repos):
         name = r.get("name", "")
@@ -216,13 +219,15 @@ def get_all_data(demo: bool = False) -> dict:
                 lang_bytes[lang] += size
                 lang_repo_bytes[(lang, name)] = size
 
-        dates, skipped_merge = _fetch_commit_dates(name, since)
-        if dates:
-            repo_commit_dates[name] = dates
+        dates_with, dates_no, merge_cnt = _fetch_commit_dates(name, since)
+        if dates_with:
+            repo_commit_dates[name] = dates_with
+        if dates_no:
+            repo_commit_dates_no_merge[name] = dates_no
 
         elapsed = time.time() - t0
-        merge_info = f", skip {skipped_merge} merge" if skipped_merge else ""
-        print(f"  [{i + 1}/{len(repos)}] {name}: {len(dates):>4} commits, {len(langs)} langs{merge_info} ({elapsed:.1f}s)",
+        merge_info = f", {merge_cnt} merge" if merge_cnt else ""
+        print(f"  [{i + 1}/{len(repos)}] {name}: {len(dates_with):>4} commits, {len(langs)} langs{merge_info} ({elapsed:.1f}s)",
               flush=True)
 
     print("  🔍 Issue/PR 统计中...", flush=True)
@@ -239,6 +244,7 @@ def get_all_data(demo: bool = False) -> dict:
         "repo_languages": repo_languages,
         "lang_bytes": lang_bytes,
         "repo_commit_dates": repo_commit_dates,
+        "repo_commit_dates_no_merge": repo_commit_dates_no_merge,
         "lang_repo_bytes": lang_repo_bytes,
         "issue_count": issue_count,
         "pr_count": pr_count,
@@ -271,7 +277,8 @@ def _generate_demo_data() -> dict:
     lang_bytes = Counter()
     repo_languages = {}
     lang_repo_bytes = {}
-    repo_commit_dates = {}
+    repo_commit_dates = {}          # 含 merge
+    repo_commit_dates_no_merge = {} # 不含 merge
 
     for name in demo_repo_names:
         primary = list(demo_langs.keys())[rnd.randint(0, len(demo_langs) - 1)]
@@ -290,12 +297,18 @@ def _generate_demo_data() -> dict:
 
         repo_languages[name] = langs_for_repo
 
-        dates = []
+        dates_with = []
+        dates_no = []
         for _ in range(rnd.randint(5, 100)):
             offset = rnd.randint(0, 364)
             d = (today - timedelta(days=offset)).isoformat()
-            dates.append(d)
-        repo_commit_dates[name] = sorted(dates)
+            dates_with.append(d)
+            # 约 10% 的 demo 提交当作 merge commit 剔除
+            if rnd.random() > 0.10:
+                dates_no.append(d)
+        repo_commit_dates[name] = sorted(dates_with)
+        if dates_no:
+            repo_commit_dates_no_merge[name] = sorted(dates_no)
 
     fork_count = 3
     total_commits = sum(len(v) for v in repo_commit_dates.values())
@@ -306,6 +319,7 @@ def _generate_demo_data() -> dict:
         "repo_languages": repo_languages,
         "lang_bytes": lang_bytes,
         "repo_commit_dates": repo_commit_dates,
+        "repo_commit_dates_no_merge": repo_commit_dates_no_merge,
         "lang_repo_bytes": lang_repo_bytes,
         "issue_count": 36,
         "pr_count": 16,

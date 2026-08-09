@@ -560,33 +560,47 @@ def render_line(data: list, title: str, y_label: str = "",
 # ---------------------------------------------------------------------------
 # 报告渲染
 # ---------------------------------------------------------------------------
+def _build_sankey_from_commits(repo_commits: dict, lang_repo_bytes: dict,
+                               top_n: int = 10) -> tuple:
+    """按「非 merge 贡献天数」为单位计算桑基图 flow：返回 (flow, lang_totals, repo_totals, top_repo_names)。"""
+    repo_sorted = sorted(repo_commits.items(), key=lambda x: -len(x[1]))
+    top_repo_names = [rn for rn, _ in repo_sorted[:top_n]]
+
+    repo_total_bytes = Counter()
+    for (lang, rn), b in lang_repo_bytes.items():
+        if rn in top_repo_names:
+            repo_total_bytes[rn] += b
+
+    # 流宽度：某仓库某语言的「贡献天数」
+    lang_repo_days = {}
+    for (lang, rn), b in lang_repo_bytes.items():
+        if rn not in top_repo_names:
+            continue
+        repo_days = len(repo_commits.get(rn, []))
+        total_b = repo_total_bytes.get(rn, 0)
+        if total_b > 0 and repo_days > 0:
+            lang_repo_days[(lang, rn)] = repo_days * (b / total_b)
+
+    repo_totals = Counter()
+    lang_totals = Counter()
+    for (lang, rn), d in lang_repo_days.items():
+        repo_totals[rn] += d
+        lang_totals[lang] += d
+    return lang_repo_days, lang_totals, repo_totals, top_repo_names
+
+
 def render_report(repo_count: int, fork_count: int, lang_bytes: Counter,
                   repo_commits: dict, lang_repo_bytes: dict,
                   issue_count: int = 0, pr_count: int = 0) -> str:
     lines = []
     lines.append("# 🔀 语言 → 项目 流向\n")
 
-    # ---- 取前10个项目（按提交量排序）----
-    repo_sorted = sorted(repo_commits.items(), key=lambda x: -len(x[1]))
-    top_repo_ids = [rid for rid, _ in repo_sorted[:10]]
-
-    # ---- 桑基图 ----
+    # ---- 桑基图（以不含 merge 的贡献天数为单位）----
     lines.append('<div align="center">')
-    repo_totals = Counter()
-    for (_lang, repo_id), amt in lang_repo_bytes.items():
-        if repo_id in top_repo_ids:
-            repo_totals[repo_id] += amt
-
-    # 筛选只关联前10项目的 (lang, repo) 对
-    top_lang_repo_bytes = {
-        k: v for k, v in lang_repo_bytes.items() if k[1] in top_repo_ids
-    }
-    # 对应的语言只取有数据的（并按字节量排序）
-    top_lang_totals = Counter()
-    for (lang, _rid), amt in top_lang_repo_bytes.items():
-        top_lang_totals[lang] += amt
-
-    sankey_svg = render_sankey(top_lang_repo_bytes, top_lang_totals, repo_totals)
+    flow, lang_totals, repo_totals, _top = _build_sankey_from_commits(
+        repo_commits, lang_repo_bytes
+    )
+    sankey_svg = render_sankey(flow, lang_totals, repo_totals)
     lines.append(sankey_svg)
     lines.append('</div>\n')
 
@@ -610,36 +624,23 @@ def main() -> None:
         data = get_all_data(demo=demo)
 
     lang_repo_bytes = data["lang_repo_bytes"]
-    repo_commit_dates = data["repo_commit_dates"]
+    # 桑基图不含 merge 贡献（仅真实代码贡献）
+    repo_commits = data.get("repo_commit_dates_no_merge") or data["repo_commit_dates"]
 
-    # repo_commit_dates: {repo_name: [date_str, ...]}  — key 就是真实仓库名
-    # lang_repo_bytes: {(lang, repo_name): bytes}
-    # 按提交量排序取前 10 个仓库
-    repo_sorted = sorted(repo_commit_dates.items(), key=lambda x: -len(x[1]))
-    top_repo_names = [name for name, _ in repo_sorted[:10]]
-
-    repo_totals = Counter()
-    for (_lang, repo_name), amt in lang_repo_bytes.items():
-        if repo_name in top_repo_names:
-            repo_totals[repo_name] += amt
-
-    top_lang_repo_bytes = {
-        k: v for k, v in lang_repo_bytes.items() if k[1] in top_repo_names
-    }
-    top_lang_totals = Counter()
-    for (lang, _rn), amt in top_lang_repo_bytes.items():
-        top_lang_totals[lang] += amt
+    flow, lang_totals, repo_totals, top_repo_names = _build_sankey_from_commits(
+        repo_commits, lang_repo_bytes
+    )
 
     # 仓库名 → 显示名（直接用真实名）
     repo_names_map = {name: name for name in top_repo_names}
 
-    sankey = render_sankey(top_lang_repo_bytes, top_lang_totals, repo_totals,
+    sankey = render_sankey(flow, lang_totals, repo_totals,
                            repo_names=repo_names_map)
 
     PROFILE_DIR.mkdir(parents=True, exist_ok=True)
     SANKEY_SVG.write_text(sankey, encoding="utf-8")
     print(f"✅ 桑基图已生成: {SANKEY_SVG}")
-    print(f"   项目数: {len(top_repo_names)}, 语言数: {len(top_lang_totals)}")
+    print(f"   项目数: {len(top_repo_names)}, 语言数: {len(lang_totals)}")
 
 
 if __name__ == "__main__":

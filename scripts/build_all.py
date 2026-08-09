@@ -97,30 +97,45 @@ def generate_fork_cards(data: dict) -> None:
 
 
 def generate_sankey(data: dict) -> None:
-    """复用 contribution_report 的 render_sankey 生成桑基图 SVG。"""
+    """生成桑基图 SVG。左=语言贡献占比，右=仓库贡献占比，单位=非 merge 贡献天数。
+
+    某仓库某语言的「贡献天数」= 该仓库总贡献天数 × (该语言在本仓库的字节量 / 该仓库总字节量)。
+    这样左右两侧总宽度守恒（都等于 top10 仓库的总贡献天数），真实反映贡献占比。
+    """
     from contribution_report import PROFILE_DIR, SANKEY_SVG, render_sankey
 
     lang_repo_bytes = data["lang_repo_bytes"]
-    repo_commit_dates = data["repo_commit_dates"]
+    # 桑基图用不含 merge 的真实贡献天数
+    repo_dates = data.get("repo_commit_dates_no_merge") or data["repo_commit_dates"]
 
-    repo_sorted = sorted(repo_commit_dates.items(), key=lambda x: -len(x[1]))
+    repo_sorted = sorted(repo_dates.items(), key=lambda x: -len(x[1]))
     top_repo_names = [name for name, _ in repo_sorted[:10]]
 
-    repo_totals: Counter = Counter()
-    for (_lang, repo_name), amt in lang_repo_bytes.items():
-        if repo_name in top_repo_names:
-            repo_totals[repo_name] += amt
+    # 每个仓库总字节量（用于按比例把贡献天数分摊到各语言）
+    repo_total_bytes: Counter = Counter()
+    for (lang, rn), b in lang_repo_bytes.items():
+        if rn in top_repo_names:
+            repo_total_bytes[rn] += b
 
-    top_lang_repo_bytes = {
-        k: v for k, v in lang_repo_bytes.items() if k[1] in top_repo_names
-    }
+    # 流宽度 = lang×repo 的「贡献天数」
+    lang_repo_days: dict = {}
+    for (lang, rn), b in lang_repo_bytes.items():
+        if rn not in top_repo_names:
+            continue
+        repo_days = len(repo_dates.get(rn, []))
+        total_b = repo_total_bytes.get(rn, 0)
+        if total_b > 0 and repo_days > 0:
+            lang_repo_days[(lang, rn)] = repo_days * (b / total_b)
+
+    repo_totals: Counter = Counter()
     top_lang_totals: Counter = Counter()
-    for (lang, _rn), amt in top_lang_repo_bytes.items():
-        top_lang_totals[lang] += amt
+    for (lang, rn), d in lang_repo_days.items():
+        repo_totals[rn] += d
+        top_lang_totals[lang] += d
 
     repo_names_map = {name: name for name in top_repo_names}
     sankey = render_sankey(
-        top_lang_repo_bytes, top_lang_totals, repo_totals, repo_names=repo_names_map
+        lang_repo_days, top_lang_totals, repo_totals, repo_names=repo_names_map
     )
 
     PROFILE_DIR.mkdir(parents=True, exist_ok=True)

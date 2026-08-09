@@ -19,6 +19,7 @@
         <img alt="Most Used Languages (incl. forks)" src="./profile/top-langs-with-forks-light.svg?sanitize=true" width="300" height="375" />
       </picture>
       <p><sub>语言使用情况（含 Fork）</sub></p>
+      <p><sup>仅统计本人名下仓库（含 Fork）</sup></p>
     </td>
   </tr>
 </table>
@@ -45,6 +46,7 @@
         <img alt="3D GitHub Contribution Graph (incl. forks)" src="./profile-3d-contrib/profile-gitblock-with-forks.svg?sanitize=true" width="100%" />
       </picture>
       <p><sub>3D 贡献统计（含 Fork）</sub></p>
+      <p><sup>仅统计本人名下仓库（含 Fork，不含我对外部仓库的直接贡献）</sup></p>
     </td>
   </tr>
 </table>
@@ -54,6 +56,7 @@
     <td align="center">
       <img alt="语言 → 项目 流向（桑基图）" src="./profile/lang-repo-sankey.svg?sanitize=true" width="100%" />
       <p><sub>语言使用 → 项目贡献 流向（Top 10 项目）</sub></p>
+      <p><sup>仅统计本人名下仓库（含 Fork），已剔除 Merge Commit</sup></p>
     </td>
   </tr>
 </table>
