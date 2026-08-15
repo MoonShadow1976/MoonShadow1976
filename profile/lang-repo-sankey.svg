@@ -2,41 +2,38 @@
 <style>.title{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}.sub{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}.label{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.legend-label{font:400 14px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.tick{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}.axis{stroke:#e4e2e2;stroke-width:1px;}.grid{stroke:#f0f0f0;stroke-width:1px;}</style>
 <rect width="1600" height="680" fill="#ffffff"/>
 <text x="800.0" y="28" text-anchor="middle" class="title">语言 → 项目 流向分析</text>
-<path d="M60.0,465.7 C800.0,465.7 800.0,424.7 1540.0,424.7 L1540.0,425.6 C800.0,425.6 800.0,466.7 60.0,466.7 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,321.9 C800.0,321.9 800.0,525.2 1540.0,525.2 L1540.0,537.1 C800.0,537.1 800.0,323.2 60.0,323.2 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,319.3 C800.0,319.3 800.0,507.2 1540.0,507.2 L1540.0,519.2 C800.0,519.2 800.0,321.9 60.0,321.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,312.9 C800.0,312.9 800.0,489.3 1540.0,489.3 L1540.0,501.2 C800.0,501.2 800.0,319.3 60.0,319.3 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,519.3 C800.0,519.3 800.0,361.0 1540.0,361.0 L1540.0,367.9 C800.0,367.9 800.0,532.3 60.0,532.3 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
-<path d="M60.0,302.5 C800.0,302.5 800.0,471.4 1540.0,471.4 L1540.0,483.3 C800.0,483.3 800.0,312.9 60.0,312.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,500.4 C800.0,500.4 800.0,351.1 1540.0,351.1 L1540.0,361.0 C800.0,361.0 800.0,513.3 60.0,513.3 Z" fill="#012456" fill-opacity="0.60" stroke="#012456" stroke-width="0.3"/>
-<path d="M60.0,453.3 C800.0,453.3 800.0,238.6 1540.0,238.6 L1540.0,250.1 C800.0,250.1 800.0,465.7 60.0,465.7 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,438.3 C800.0,438.3 800.0,451.6 1540.0,451.6 L1540.0,465.4 C800.0,465.4 800.0,453.3 60.0,453.3 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,472.7 C800.0,472.7 800.0,425.6 1540.0,425.6 L1540.0,445.6 C800.0,445.6 800.0,494.4 60.0,494.4 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
-<path d="M60.0,253.8 C800.0,253.8 800.0,373.9 1540.0,373.9 L1540.0,418.7 C800.0,418.7 800.0,302.5 60.0,302.5 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,329.2 C800.0,329.2 800.0,256.1 1540.0,256.1 L1540.0,351.1 C800.0,351.1 800.0,432.3 60.0,432.3 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
-<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,238.6 C800.0,238.6 800.0,253.8 60.0,253.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<rect x="40" y="60.0" width="20" height="263.2" fill="#3572A5" rx="2"/>
-<rect x="40" y="329.2" width="20" height="103.1" fill="#3178C6" rx="2"/>
-<rect x="40" y="438.3" width="20" height="28.3" fill="#E34C26" rx="2"/>
-<rect x="40" y="472.7" width="20" height="21.7" fill="#DEA584" rx="2"/>
-<rect x="40" y="500.4" width="20" height="12.9" fill="#012456" rx="2"/>
-<rect x="40" y="519.3" width="20" height="12.9" fill="#F1E05A" rx="2"/>
-<rect x="1540" y="60.0" width="20" height="190.1" fill="#2f80ed" rx="2"/>
-<rect x="1540" y="256.1" width="20" height="111.8" fill="#eb5757" rx="2"/>
-<rect x="1540" y="373.9" width="20" height="44.8" fill="#f2994a" rx="2"/>
-<rect x="1540" y="424.7" width="20" height="20.9" fill="#56ccf2" rx="2"/>
-<rect x="1540" y="451.6" width="20" height="13.7" fill="#bb6bd9" rx="2"/>
+<path d="M60.0,483.6 C800.0,483.6 800.0,425.1 1540.0,425.1 L1540.0,426.0 C800.0,426.0 800.0,484.6 60.0,484.6 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,323.5 C800.0,323.5 800.0,525.2 1540.0,525.2 L1540.0,537.1 C800.0,537.1 800.0,324.8 60.0,324.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,320.9 C800.0,320.9 800.0,507.3 1540.0,507.3 L1540.0,519.2 C800.0,519.2 800.0,323.5 60.0,323.5 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,518.4 C800.0,518.4 800.0,362.5 1540.0,362.5 L1540.0,368.2 C800.0,368.2 800.0,531.5 60.0,531.5 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
+<path d="M60.0,314.4 C800.0,314.4 800.0,489.3 1540.0,489.3 L1540.0,501.3 C800.0,501.3 800.0,320.9 60.0,320.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,303.9 C800.0,303.9 800.0,471.4 1540.0,471.4 L1540.0,483.3 C800.0,483.3 800.0,314.4 60.0,314.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,471.1 C800.0,471.1 800.0,236.7 1540.0,236.7 L1540.0,248.0 C800.0,248.0 800.0,483.6 60.0,483.6 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,456.2 C800.0,456.2 800.0,451.8 1540.0,451.8 L1540.0,465.4 C800.0,465.4 800.0,471.1 60.0,471.1 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,490.6 C800.0,490.6 800.0,426.0 1540.0,426.0 L1540.0,445.8 C800.0,445.8 800.0,512.4 60.0,512.4 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
+<path d="M60.0,254.5 C800.0,254.5 800.0,374.2 1540.0,374.2 L1540.0,419.1 C800.0,419.1 800.0,303.9 60.0,303.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,330.8 C800.0,330.8 800.0,254.0 1540.0,254.0 L1540.0,362.5 C800.0,362.5 800.0,450.2 60.0,450.2 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
+<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,236.7 C800.0,236.7 800.0,254.5 60.0,254.5 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<rect x="40" y="60.0" width="20" height="264.8" fill="#3572A5" rx="2"/>
+<rect x="40" y="330.8" width="20" height="119.4" fill="#3178C6" rx="2"/>
+<rect x="40" y="456.2" width="20" height="28.4" fill="#E34C26" rx="2"/>
+<rect x="40" y="490.6" width="20" height="21.8" fill="#DEA584" rx="2"/>
+<rect x="40" y="518.4" width="20" height="13.1" fill="#F1E05A" rx="2"/>
+<rect x="1540" y="60.0" width="20" height="188.0" fill="#2f80ed" rx="2"/>
+<rect x="1540" y="254.0" width="20" height="114.1" fill="#eb5757" rx="2"/>
+<rect x="1540" y="374.2" width="20" height="44.9" fill="#f2994a" rx="2"/>
+<rect x="1540" y="425.1" width="20" height="20.7" fill="#56ccf2" rx="2"/>
+<rect x="1540" y="451.8" width="20" height="13.6" fill="#bb6bd9" rx="2"/>
 <rect x="1540" y="471.4" width="20" height="11.9" fill="#27ae60" rx="2"/>
 <rect x="1540" y="489.3" width="20" height="11.9" fill="#e91e63" rx="2"/>
-<rect x="1540" y="507.2" width="20" height="11.9" fill="#00bcd4" rx="2"/>
+<rect x="1540" y="507.3" width="20" height="11.9" fill="#00bcd4" rx="2"/>
 <rect x="1540" y="525.2" width="20" height="11.9" fill="#ff5722" rx="2"/>
 <text x="800.0" y="560" text-anchor="middle" class="sub">语言</text>
-<rect x="535.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="555.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
-<rect x="615.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="635.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
-<rect x="727.0" y="574.0" width="14" height="14" fill="#E34C26" rx="2"/><text x="747.0" y="586.0" class="legend-label" text-anchor="start">HTML</text>
-<rect x="791.0" y="574.0" width="14" height="14" fill="#DEA584" rx="2"/><text x="811.0" y="586.0" class="legend-label" text-anchor="start">Rust</text>
-<rect x="855.0" y="574.0" width="14" height="14" fill="#012456" rx="2"/><text x="875.0" y="586.0" class="legend-label" text-anchor="start">PowerShell</text>
-<rect x="967.0" y="574.0" width="14" height="14" fill="#F1E05A" rx="2"/><text x="987.0" y="586.0" class="legend-label" text-anchor="start">JavaScript</text>
+<rect x="591.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="611.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
+<rect x="671.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="691.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
+<rect x="783.0" y="574.0" width="14" height="14" fill="#E34C26" rx="2"/><text x="803.0" y="586.0" class="legend-label" text-anchor="start">HTML</text>
+<rect x="847.0" y="574.0" width="14" height="14" fill="#DEA584" rx="2"/><text x="867.0" y="586.0" class="legend-label" text-anchor="start">Rust</text>
+<rect x="911.0" y="574.0" width="14" height="14" fill="#F1E05A" rx="2"/><text x="931.0" y="586.0" class="legend-label" text-anchor="start">JavaScript</text>
 <text x="800.0" y="619" text-anchor="middle" class="sub">仓库</text>
 <rect x="75.0" y="635.0" width="14" height="14" fill="#2f80ed" rx="2"/><text x="95.0" y="647.0" class="legend-label" text-anchor="start">WutheringWavesUID</text>
 <rect x="243.0" y="635.0" width="14" height="14" fill="#eb5757" rx="2"/><text x="263.0" y="647.0" class="legend-label" text-anchor="start">chiral-pulse</text>

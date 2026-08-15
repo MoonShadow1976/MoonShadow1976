@@ -37,28 +37,28 @@
 </g>
 <g data-testid="main-card-body" transform="translate(0, 70)">
   <svg data-testid="lang-items">
-    <g class="stagger" style="animation-delay: 100ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 150.00 20.00 A 85.00 85.00 0 1 1 77.40 149.21 Z" fill="#3572A5"/></g>
-    <g class="stagger" style="animation-delay: 200ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 77.40 149.21 A 85.00 85.00 0 0 1 70.34 75.36 Z" fill="#8b949e"/></g>
-    <g class="stagger" style="animation-delay: 300ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 70.34 75.36 A 85.00 85.00 0 0 1 81.79 54.28 Z" fill="#DEA584"/></g>
-    <g class="stagger" style="animation-delay: 400ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 81.79 54.28 A 85.00 85.00 0 0 1 95.96 39.39 Z" fill="#F1E05A"/></g>
-    <g class="stagger" style="animation-delay: 500ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 95.96 39.39 A 85.00 85.00 0 0 1 111.58 29.18 Z" fill="#E34C26"/></g>
-    <g class="stagger" style="animation-delay: 600ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 111.58 29.18 A 85.00 85.00 0 0 1 127.59 23.01 Z" fill="#41B883"/></g>
-    <g class="stagger" style="animation-delay: 700ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 127.59 23.01 A 85.00 85.00 0 0 1 138.57 20.77 Z" fill="#F34B7D"/></g>
-    <g class="stagger" style="animation-delay: 800ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 138.57 20.77 A 85.00 85.00 0 0 1 142.11 20.37 Z" fill="#8b949e"/></g>
-    <g class="stagger" style="animation-delay: 900ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 142.11 20.37 A 85.00 85.00 0 0 1 144.72 20.16 Z" fill="#3178C6"/></g>
-    <g class="stagger" style="animation-delay: 1000ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 144.72 20.16 A 85.00 85.00 0 0 1 150.00 20.00 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 100ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 150.00 20.00 A 85.00 85.00 0 1 1 77.32 149.08 Z" fill="#3572A5"/></g>
+    <g class="stagger" style="animation-delay: 200ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 77.32 149.08 A 85.00 85.00 0 0 1 70.40 75.18 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 300ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 70.40 75.18 A 85.00 85.00 0 0 1 81.92 54.11 Z" fill="#DEA584"/></g>
+    <g class="stagger" style="animation-delay: 400ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 81.92 54.11 A 85.00 85.00 0 0 1 96.10 39.28 Z" fill="#F1E05A"/></g>
+    <g class="stagger" style="animation-delay: 500ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 96.10 39.28 A 85.00 85.00 0 0 1 111.75 29.09 Z" fill="#E34C26"/></g>
+    <g class="stagger" style="animation-delay: 600ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 111.75 29.09 A 85.00 85.00 0 0 1 127.79 22.95 Z" fill="#41B883"/></g>
+    <g class="stagger" style="animation-delay: 700ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 127.79 22.95 A 85.00 85.00 0 0 1 138.78 20.74 Z" fill="#F34B7D"/></g>
+    <g class="stagger" style="animation-delay: 800ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 138.78 20.74 A 85.00 85.00 0 0 1 142.32 20.35 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 900ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 142.32 20.35 A 85.00 85.00 0 0 1 144.86 20.16 Z" fill="#3178C6"/></g>
+    <g class="stagger" style="animation-delay: 1000ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 144.86 20.16 A 85.00 85.00 0 0 1 150.00 20.00 Z" fill="#8b949e"/></g>
     <g transform="translate(0, 205)">
       <svg data-testid="lang-names" x="25">
-        <g transform="translate(0, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#3572A5"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Python 66.29%</text></g></g>
+        <g transform="translate(0, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#3572A5"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Python 66.32%</text></g></g>
         <g transform="translate(0, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">PLpgSQL 14.38%</text></g></g>
         <g transform="translate(0, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#DEA584"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Rust 4.51%</text></g></g>
-        <g transform="translate(0, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#F1E05A"/><text data-testid="lang-name" x="15" y="10" class="lang-name">JavaScript 3.86%</text></g></g>
+        <g transform="translate(0, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#F1E05A"/><text data-testid="lang-name" x="15" y="10" class="lang-name">JavaScript 3.85%</text></g></g>
         <g transform="translate(0, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#E34C26"/><text data-testid="lang-name" x="15" y="10" class="lang-name">HTML 3.50%</text></g></g>
         <g transform="translate(150, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#41B883"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Vue 3.22%</text></g></g>
         <g transform="translate(150, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#F34B7D"/><text data-testid="lang-name" x="15" y="10" class="lang-name">C++ 2.10%</text></g></g>
         <g transform="translate(150, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Cuda 0.67%</text></g></g>
-        <g transform="translate(150, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#3178C6"/><text data-testid="lang-name" x="15" y="10" class="lang-name">TypeScript 0.49%</text></g></g>
-        <g transform="translate(150, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Other 0.99%</text></g></g>
+        <g transform="translate(150, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#3178C6"/><text data-testid="lang-name" x="15" y="10" class="lang-name">TypeScript 0.48%</text></g></g>
+        <g transform="translate(150, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Other 0.96%</text></g></g>
       </svg>
     </g>
   </svg>
