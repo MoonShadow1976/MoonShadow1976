@@ -3,31 +3,31 @@
 <rect width="1600" height="680" fill="#ffffff"/>
 <text x="800.0" y="28" text-anchor="middle" class="title">语言 → 项目 流向分析</text>
 <path d="M60.0,510.9 C800.0,510.9 800.0,448.1 1540.0,448.1 L1540.0,449.0 C800.0,449.0 800.0,511.9 60.0,511.9 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,341.1 C800.0,341.1 800.0,526.0 1540.0,526.0 L1540.0,537.7 C800.0,537.7 800.0,342.4 60.0,342.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,339.2 C800.0,339.2 800.0,508.2 1540.0,508.2 L1540.0,520.0 C800.0,520.0 800.0,341.1 60.0,341.1 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,332.9 C800.0,332.9 800.0,490.5 1540.0,490.5 L1540.0,502.2 C800.0,502.2 800.0,339.2 60.0,339.2 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,340.0 C800.0,340.0 800.0,526.0 1540.0,526.0 L1540.0,537.7 C800.0,537.7 800.0,341.3 60.0,341.3 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,338.1 C800.0,338.1 800.0,508.2 1540.0,508.2 L1540.0,520.0 C800.0,520.0 800.0,340.0 60.0,340.0 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,331.8 C800.0,331.8 800.0,490.5 1540.0,490.5 L1540.0,502.2 C800.0,502.2 800.0,338.1 60.0,338.1 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
 <path d="M60.0,504.0 C800.0,504.0 800.0,472.7 1540.0,472.7 L1540.0,484.5 C800.0,484.5 800.0,510.9 60.0,510.9 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,322.8 C800.0,322.8 800.0,455.0 1540.0,455.0 L1540.0,466.7 C800.0,466.7 800.0,332.9 60.0,332.9 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,491.8 C800.0,491.8 800.0,241.2 1540.0,241.2 L1540.0,251.9 C800.0,251.9 800.0,504.0 60.0,504.0 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,517.9 C800.0,517.9 800.0,355.2 1540.0,355.2 L1540.0,366.5 C800.0,366.5 800.0,531.2 60.0,531.2 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
-<path d="M60.0,464.6 C800.0,464.6 800.0,429.4 1540.0,429.4 L1540.0,448.1 C800.0,448.1 800.0,485.8 60.0,485.8 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
-<path d="M60.0,265.1 C800.0,265.1 800.0,372.5 1540.0,372.5 L1540.0,423.4 C800.0,423.4 800.0,322.8 60.0,322.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,348.4 C800.0,348.4 800.0,257.9 1540.0,257.9 L1540.0,355.2 C800.0,355.2 800.0,458.6 60.0,458.6 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
-<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,241.2 C800.0,241.2 800.0,265.1 60.0,265.1 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<rect x="40" y="60.0" width="20" height="282.4" fill="#3572A5" rx="2"/>
-<rect x="40" y="348.4" width="20" height="110.2" fill="#3178C6" rx="2"/>
-<rect x="40" y="464.6" width="20" height="21.2" fill="#DEA584" rx="2"/>
-<rect x="40" y="491.8" width="20" height="20.1" fill="#E34C26" rx="2"/>
+<path d="M60.0,321.7 C800.0,321.7 800.0,455.0 1540.0,455.0 L1540.0,466.7 C800.0,466.7 800.0,331.8 60.0,331.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,491.9 C800.0,491.9 800.0,240.4 1540.0,240.4 L1540.0,251.1 C800.0,251.1 800.0,504.0 60.0,504.0 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,517.9 C800.0,517.9 800.0,355.5 1540.0,355.5 L1540.0,366.8 C800.0,366.8 800.0,531.2 60.0,531.2 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
+<path d="M60.0,464.7 C800.0,464.7 800.0,429.5 1540.0,429.5 L1540.0,448.1 C800.0,448.1 800.0,485.9 60.0,485.9 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
+<path d="M60.0,264.3 C800.0,264.3 800.0,372.8 1540.0,372.8 L1540.0,423.5 C800.0,423.5 800.0,321.7 60.0,321.7 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,347.3 C800.0,347.3 800.0,257.1 1540.0,257.1 L1540.0,355.5 C800.0,355.5 800.0,458.7 60.0,458.7 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
+<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,240.4 C800.0,240.4 800.0,264.3 60.0,264.3 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<rect x="40" y="60.0" width="20" height="281.3" fill="#3572A5" rx="2"/>
+<rect x="40" y="347.3" width="20" height="111.4" fill="#3178C6" rx="2"/>
+<rect x="40" y="464.7" width="20" height="21.1" fill="#DEA584" rx="2"/>
+<rect x="40" y="491.9" width="20" height="20.0" fill="#E34C26" rx="2"/>
 <rect x="40" y="517.9" width="20" height="13.3" fill="#F1E05A" rx="2"/>
-<rect x="1540" y="60.0" width="20" height="191.9" fill="#2f80ed" rx="2"/>
-<rect x="1540" y="257.9" width="20" height="108.5" fill="#eb5757" rx="2"/>
-<rect x="1540" y="372.5" width="20" height="50.9" fill="#f2994a" rx="2"/>
-<rect x="1540" y="429.4" width="20" height="19.6" fill="#56ccf2" rx="2"/>
-<rect x="1540" y="455.0" width="20" height="11.8" fill="#bb6bd9" rx="2"/>
-<rect x="1540" y="472.7" width="20" height="11.8" fill="#27ae60" rx="2"/>
-<rect x="1540" y="490.5" width="20" height="11.8" fill="#e91e63" rx="2"/>
-<rect x="1540" y="508.2" width="20" height="11.8" fill="#00bcd4" rx="2"/>
-<rect x="1540" y="526.0" width="20" height="11.8" fill="#ff5722" rx="2"/>
+<rect x="1540" y="60.0" width="20" height="191.1" fill="#2f80ed" rx="2"/>
+<rect x="1540" y="257.1" width="20" height="109.7" fill="#eb5757" rx="2"/>
+<rect x="1540" y="372.8" width="20" height="50.7" fill="#f2994a" rx="2"/>
+<rect x="1540" y="429.5" width="20" height="19.5" fill="#56ccf2" rx="2"/>
+<rect x="1540" y="455.0" width="20" height="11.7" fill="#bb6bd9" rx="2"/>
+<rect x="1540" y="472.7" width="20" height="11.7" fill="#27ae60" rx="2"/>
+<rect x="1540" y="490.5" width="20" height="11.7" fill="#e91e63" rx="2"/>
+<rect x="1540" y="508.2" width="20" height="11.7" fill="#00bcd4" rx="2"/>
+<rect x="1540" y="526.0" width="20" height="11.7" fill="#ff5722" rx="2"/>
 <text x="800.0" y="560" text-anchor="middle" class="sub">语言</text>
 <rect x="591.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="611.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
 <rect x="671.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="691.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
