@@ -2,30 +2,26 @@
 <style>.title{font:600 16px "Segoe UI",Ubuntu,sans-serif;fill:#2f80ed;}.sub{font:400 12px "Segoe UI",Ubuntu,sans-serif;fill:#6e7781;}.label{font:400 11px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.legend-label{font:400 14px "Segoe UI",Ubuntu,sans-serif;fill:#434d58;}.tick{font:400 10px "Segoe UI",Ubuntu,sans-serif;fill:#8b949e;}.axis{stroke:#e4e2e2;stroke-width:1px;}.grid{stroke:#f0f0f0;stroke-width:1px;}</style>
 <rect width="1600" height="680" fill="#ffffff"/>
 <text x="800.0" y="28" text-anchor="middle" class="title">语言 → 项目 流向分析</text>
-<path d="M60.0,522.0 C800.0,522.0 800.0,537.8 1540.0,537.8 L1540.0,537.8 C800.0,537.8 800.0,534.3 60.0,534.3 Z" fill="#e91e63" fill-opacity="0.60" stroke="#e91e63" stroke-width="0.3"/>
-<path d="M60.0,503.7 C800.0,503.7 800.0,537.8 1540.0,537.8 L1540.0,537.8 C800.0,537.8 800.0,516.0 60.0,516.0 Z" fill="#384D54" fill-opacity="0.60" stroke="#384D54" stroke-width="0.3"/>
-<path d="M60.0,321.2 C800.0,321.2 800.0,526.1 1540.0,526.1 L1540.0,537.8 C800.0,537.8 800.0,321.8 60.0,321.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,477.0 C800.0,477.0 800.0,448.3 1540.0,448.3 L1540.0,449.2 C800.0,449.2 800.0,477.9 60.0,477.9 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,319.4 C800.0,319.4 800.0,508.3 1540.0,508.3 L1540.0,520.1 C800.0,520.1 800.0,321.2 60.0,321.2 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,313.7 C800.0,313.7 800.0,490.6 1540.0,490.6 L1540.0,502.3 C800.0,502.3 800.0,319.4 60.0,319.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,470.7 C800.0,470.7 800.0,472.9 1540.0,472.9 L1540.0,484.6 C800.0,484.6 800.0,477.0 60.0,477.0 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,304.4 C800.0,304.4 800.0,455.2 1540.0,455.2 L1540.0,466.9 C800.0,466.9 800.0,313.7 60.0,313.7 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,460.3 C800.0,460.3 800.0,238.7 1540.0,238.7 L1540.0,248.6 C800.0,248.6 800.0,470.7 60.0,470.7 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
-<path d="M60.0,483.9 C800.0,483.9 800.0,350.9 1540.0,350.9 L1540.0,364.0 C800.0,364.0 800.0,497.7 60.0,497.7 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
-<path d="M60.0,434.9 C800.0,434.9 800.0,429.9 1540.0,429.9 L1540.0,448.3 C800.0,448.3 800.0,454.3 60.0,454.3 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
-<path d="M60.0,247.8 C800.0,247.8 800.0,370.0 1540.0,370.0 L1540.0,423.9 C800.0,423.9 800.0,304.4 60.0,304.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<path d="M60.0,327.8 C800.0,327.8 800.0,254.6 1540.0,254.6 L1540.0,350.9 C800.0,350.9 800.0,428.9 60.0,428.9 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
-<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,238.7 C800.0,238.7 800.0,247.8 60.0,247.8 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
-<rect x="40" y="60.0" width="20" height="261.8" fill="#3572A5" rx="2"/>
-<rect x="40" y="327.8" width="20" height="101.2" fill="#3178C6" rx="2"/>
-<rect x="40" y="434.9" width="20" height="19.3" fill="#DEA584" rx="2"/>
-<rect x="40" y="460.3" width="20" height="17.6" fill="#E34C26" rx="2"/>
-<rect x="40" y="483.9" width="20" height="13.8" fill="#F1E05A" rx="2"/>
-<rect x="40" y="503.7" width="20" height="12.3" fill="#384D54" rx="2"/>
-<rect x="40" y="522.0" width="20" height="12.3" fill="#e91e63" rx="2"/>
-<rect x="1540" y="60.0" width="20" height="188.6" fill="#2f80ed" rx="2"/>
-<rect x="1540" y="254.6" width="20" height="109.4" fill="#eb5757" rx="2"/>
-<rect x="1540" y="370.0" width="20" height="53.9" fill="#f2994a" rx="2"/>
+<path d="M60.0,342.5 C800.0,342.5 800.0,526.1 1540.0,526.1 L1540.0,537.8 C800.0,537.8 800.0,343.1 60.0,343.1 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,509.3 C800.0,509.3 800.0,448.3 1540.0,448.3 L1540.0,449.2 C800.0,449.2 800.0,510.3 60.0,510.3 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,340.7 C800.0,340.7 800.0,508.3 1540.0,508.3 L1540.0,520.1 C800.0,520.1 800.0,342.5 60.0,342.5 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,334.4 C800.0,334.4 800.0,490.6 1540.0,490.6 L1540.0,502.3 C800.0,502.3 800.0,340.7 60.0,340.7 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,502.5 C800.0,502.5 800.0,472.9 1540.0,472.9 L1540.0,484.6 C800.0,484.6 800.0,509.3 60.0,509.3 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,324.4 C800.0,324.4 800.0,455.2 1540.0,455.2 L1540.0,466.9 C800.0,466.9 800.0,334.4 60.0,334.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,491.3 C800.0,491.3 800.0,239.0 1540.0,239.0 L1540.0,248.9 C800.0,248.9 800.0,502.5 60.0,502.5 Z" fill="#E34C26" fill-opacity="0.60" stroke="#E34C26" stroke-width="0.3"/>
+<path d="M60.0,516.3 C800.0,516.3 800.0,351.0 1540.0,351.0 L1540.0,364.1 C800.0,364.1 800.0,531.2 60.0,531.2 Z" fill="#F1E05A" fill-opacity="0.60" stroke="#F1E05A" stroke-width="0.3"/>
+<path d="M60.0,464.4 C800.0,464.4 800.0,429.9 1540.0,429.9 L1540.0,448.3 C800.0,448.3 800.0,485.3 60.0,485.3 Z" fill="#DEA584" fill-opacity="0.60" stroke="#DEA584" stroke-width="0.3"/>
+<path d="M60.0,263.3 C800.0,263.3 800.0,370.1 1540.0,370.1 L1540.0,423.9 C800.0,423.9 800.0,324.4 60.0,324.4 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<path d="M60.0,349.1 C800.0,349.1 800.0,254.9 1540.0,254.9 L1540.0,351.0 C800.0,351.0 800.0,458.4 60.0,458.4 Z" fill="#3178C6" fill-opacity="0.60" stroke="#3178C6" stroke-width="0.3"/>
+<path d="M60.0,60.0 C800.0,60.0 800.0,60.0 1540.0,60.0 L1540.0,239.0 C800.0,239.0 800.0,263.3 60.0,263.3 Z" fill="#3572A5" fill-opacity="0.60" stroke="#3572A5" stroke-width="0.3"/>
+<rect x="40" y="60.0" width="20" height="283.1" fill="#3572A5" rx="2"/>
+<rect x="40" y="349.1" width="20" height="109.2" fill="#3178C6" rx="2"/>
+<rect x="40" y="464.4" width="20" height="20.9" fill="#DEA584" rx="2"/>
+<rect x="40" y="491.3" width="20" height="19.0" fill="#E34C26" rx="2"/>
+<rect x="40" y="516.3" width="20" height="14.9" fill="#F1E05A" rx="2"/>
+<rect x="1540" y="60.0" width="20" height="188.9" fill="#2f80ed" rx="2"/>
+<rect x="1540" y="254.9" width="20" height="109.3" fill="#eb5757" rx="2"/>
+<rect x="1540" y="370.1" width="20" height="53.8" fill="#f2994a" rx="2"/>
 <rect x="1540" y="429.9" width="20" height="19.2" fill="#56ccf2" rx="2"/>
 <rect x="1540" y="455.2" width="20" height="11.7" fill="#bb6bd9" rx="2"/>
 <rect x="1540" y="472.9" width="20" height="11.7" fill="#27ae60" rx="2"/>
@@ -33,13 +29,11 @@
 <rect x="1540" y="508.3" width="20" height="11.7" fill="#00bcd4" rx="2"/>
 <rect x="1540" y="526.1" width="20" height="11.7" fill="#ff5722" rx="2"/>
 <text x="800.0" y="560" text-anchor="middle" class="sub">语言</text>
-<rect x="487.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="507.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
-<rect x="567.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="587.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
-<rect x="679.0" y="574.0" width="14" height="14" fill="#DEA584" rx="2"/><text x="699.0" y="586.0" class="legend-label" text-anchor="start">Rust</text>
-<rect x="743.0" y="574.0" width="14" height="14" fill="#E34C26" rx="2"/><text x="763.0" y="586.0" class="legend-label" text-anchor="start">HTML</text>
-<rect x="807.0" y="574.0" width="14" height="14" fill="#F1E05A" rx="2"/><text x="827.0" y="586.0" class="legend-label" text-anchor="start">JavaScript</text>
-<rect x="919.0" y="574.0" width="14" height="14" fill="#384D54" rx="2"/><text x="939.0" y="586.0" class="legend-label" text-anchor="start">Dockerfile</text>
-<rect x="1031.0" y="574.0" width="14" height="14" fill="#e91e63" rx="2"/><text x="1051.0" y="586.0" class="legend-label" text-anchor="start">Mustache</text>
+<rect x="591.0" y="574.0" width="14" height="14" fill="#3572A5" rx="2"/><text x="611.0" y="586.0" class="legend-label" text-anchor="start">Python</text>
+<rect x="671.0" y="574.0" width="14" height="14" fill="#3178C6" rx="2"/><text x="691.0" y="586.0" class="legend-label" text-anchor="start">TypeScript</text>
+<rect x="783.0" y="574.0" width="14" height="14" fill="#DEA584" rx="2"/><text x="803.0" y="586.0" class="legend-label" text-anchor="start">Rust</text>
+<rect x="847.0" y="574.0" width="14" height="14" fill="#E34C26" rx="2"/><text x="867.0" y="586.0" class="legend-label" text-anchor="start">HTML</text>
+<rect x="911.0" y="574.0" width="14" height="14" fill="#F1E05A" rx="2"/><text x="931.0" y="586.0" class="legend-label" text-anchor="start">JavaScript</text>
 <text x="800.0" y="619" text-anchor="middle" class="sub">仓库</text>
 <rect x="75.0" y="635.0" width="14" height="14" fill="#2f80ed" rx="2"/><text x="95.0" y="647.0" class="legend-label" text-anchor="start">WutheringWavesUID</text>
 <rect x="243.0" y="635.0" width="14" height="14" fill="#eb5757" rx="2"/><text x="263.0" y="647.0" class="legend-label" text-anchor="start">chiral-pulse</text>
@@ -48,6 +42,6 @@
 <rect x="819.0" y="635.0" width="14" height="14" fill="#bb6bd9" rx="2"/><text x="839.0" y="647.0" class="legend-label" text-anchor="start">MoonShadow1976</text>
 <rect x="963.0" y="635.0" width="14" height="14" fill="#27ae60" rx="2"/><text x="983.0" y="647.0" class="legend-label" text-anchor="start">WutheringWaves_RedBlackList</text>
 <rect x="1211.0" y="635.0" width="14" height="14" fill="#e91e63" rx="2"/><text x="1231.0" y="647.0" class="legend-label" text-anchor="start">wutheringwaves_gacha_record_converter</text>
-<rect x="607.0" y="657.0" width="14" height="14" fill="#00bcd4" rx="2"/><text x="627.0" y="669.0" class="legend-label" text-anchor="start">astrbot_plugin_ExchangeRateQuery</text>
-<rect x="895.0" y="657.0" width="14" height="14" fill="#ff5722" rx="2"/><text x="915.0" y="669.0" class="legend-label" text-anchor="start">gsuid_core</text>
+<rect x="591.0" y="657.0" width="14" height="14" fill="#00bcd4" rx="2"/><text x="611.0" y="669.0" class="legend-label" text-anchor="start">astrbot_plugin_ExchangeRateQuery</text>
+<rect x="879.0" y="657.0" width="14" height="14" fill="#ff5722" rx="2"/><text x="899.0" y="669.0" class="legend-label" text-anchor="start">arcgis_plugins</text>
 </svg>
