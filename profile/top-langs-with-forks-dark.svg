@@ -37,28 +37,28 @@
 </g>
 <g data-testid="main-card-body" transform="translate(0, 70)">
   <svg data-testid="lang-items">
-    <g class="stagger" style="animation-delay: 100ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 150.00 20.00 A 85.00 85.00 0 1 1 115.91 182.87 Z" fill="#3572A5"/></g>
-    <g class="stagger" style="animation-delay: 200ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 115.91 182.87 A 85.00 85.00 0 0 1 66.87 122.71 Z" fill="#00B4AB"/></g>
-    <g class="stagger" style="animation-delay: 300ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 66.87 122.71 A 85.00 85.00 0 0 1 76.82 61.76 Z" fill="#8b949e"/></g>
-    <g class="stagger" style="animation-delay: 400ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 76.82 61.76 A 85.00 85.00 0 0 1 88.80 46.02 Z" fill="#DEA584"/></g>
-    <g class="stagger" style="animation-delay: 500ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 88.80 46.02 A 85.00 85.00 0 0 1 102.39 34.59 Z" fill="#F1E05A"/></g>
-    <g class="stagger" style="animation-delay: 600ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 102.39 34.59 A 85.00 85.00 0 0 1 115.86 27.16 Z" fill="#E34C26"/></g>
-    <g class="stagger" style="animation-delay: 700ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 115.86 27.16 A 85.00 85.00 0 0 1 129.23 22.58 Z" fill="#41B883"/></g>
-    <g class="stagger" style="animation-delay: 800ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 129.23 22.58 A 85.00 85.00 0 0 1 138.91 20.73 Z" fill="#F34B7D"/></g>
-    <g class="stagger" style="animation-delay: 900ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 138.91 20.73 A 85.00 85.00 0 0 1 141.82 20.39 Z" fill="#8b949e"/></g>
-    <g class="stagger" style="animation-delay: 1000ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 141.82 20.39 A 85.00 85.00 0 0 1 150.00 20.00 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 100ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 150.00 20.00 A 85.00 85.00 0 0 1 193.03 178.30 Z" fill="#3572A5"/></g>
+    <g class="stagger" style="animation-delay: 200ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 193.03 178.30 A 85.00 85.00 0 0 1 67.93 127.13 Z" fill="#DEA584"/></g>
+    <g class="stagger" style="animation-delay: 300ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 67.93 127.13 A 85.00 85.00 0 0 1 72.85 69.32 Z" fill="#00B4AB"/></g>
+    <g class="stagger" style="animation-delay: 400ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 72.85 69.32 A 85.00 85.00 0 0 1 102.61 34.44 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 500ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 102.61 34.44 A 85.00 85.00 0 0 1 114.05 27.98 Z" fill="#F1E05A"/></g>
+    <g class="stagger" style="animation-delay: 600ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 114.05 27.98 A 85.00 85.00 0 0 1 124.59 23.89 Z" fill="#E34C26"/></g>
+    <g class="stagger" style="animation-delay: 700ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 124.59 23.89 A 85.00 85.00 0 0 1 134.67 21.39 Z" fill="#41B883"/></g>
+    <g class="stagger" style="animation-delay: 800ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 134.67 21.39 A 85.00 85.00 0 0 1 141.84 20.39 Z" fill="#F34B7D"/></g>
+    <g class="stagger" style="animation-delay: 900ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 141.84 20.39 A 85.00 85.00 0 0 1 143.99 20.21 Z" fill="#8b949e"/></g>
+    <g class="stagger" style="animation-delay: 1000ms"><path data-testid="lang-pie" d="M 150.00 105.00 L 143.99 20.21 A 85.00 85.00 0 0 1 150.00 20.00 Z" fill="#8b949e"/></g>
     <g transform="translate(0, 205)">
       <svg data-testid="lang-names" x="25">
-        <g transform="translate(0, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#3572A5"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Python 56.57%</text></g></g>
-        <g transform="translate(0, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#00B4AB"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Dart 15.09%</text></g></g>
-        <g transform="translate(0, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">PLpgSQL 11.84%</text></g></g>
-        <g transform="translate(0, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#DEA584"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Rust 3.71%</text></g></g>
-        <g transform="translate(0, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#F1E05A"/><text data-testid="lang-name" x="15" y="10" class="lang-name">JavaScript 3.33%</text></g></g>
-        <g transform="translate(150, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#E34C26"/><text data-testid="lang-name" x="15" y="10" class="lang-name">HTML 2.88%</text></g></g>
-        <g transform="translate(150, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#41B883"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Vue 2.65%</text></g></g>
-        <g transform="translate(150, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#F34B7D"/><text data-testid="lang-name" x="15" y="10" class="lang-name">C++ 1.85%</text></g></g>
-        <g transform="translate(150, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Cuda 0.55%</text></g></g>
-        <g transform="translate(150, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Other 1.53%</text></g></g>
+        <g transform="translate(0, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#3572A5"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Python 41.55%</text></g></g>
+        <g transform="translate(0, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#DEA584"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Rust 29.26%</text></g></g>
+        <g transform="translate(0, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#00B4AB"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Dart 11.08%</text></g></g>
+        <g transform="translate(0, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">PLpgSQL 8.69%</text></g></g>
+        <g transform="translate(0, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#F1E05A"/><text data-testid="lang-name" x="15" y="10" class="lang-name">JavaScript 2.46%</text></g></g>
+        <g transform="translate(150, 0)"><g class="stagger" style="animation-delay: 450ms"><circle cx="5" cy="6" r="5" fill="#E34C26"/><text data-testid="lang-name" x="15" y="10" class="lang-name">HTML 2.12%</text></g></g>
+        <g transform="translate(150, 18)"><g class="stagger" style="animation-delay: 600ms"><circle cx="5" cy="6" r="5" fill="#41B883"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Vue 1.95%</text></g></g>
+        <g transform="translate(150, 36)"><g class="stagger" style="animation-delay: 750ms"><circle cx="5" cy="6" r="5" fill="#F34B7D"/><text data-testid="lang-name" x="15" y="10" class="lang-name">C++ 1.36%</text></g></g>
+        <g transform="translate(150, 54)"><g class="stagger" style="animation-delay: 900ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Cuda 0.40%</text></g></g>
+        <g transform="translate(150, 72)"><g class="stagger" style="animation-delay: 1050ms"><circle cx="5" cy="6" r="5" fill="#8b949e"/><text data-testid="lang-name" x="15" y="10" class="lang-name">Other 1.13%</text></g></g>
       </svg>
     </g>
   </svg>
